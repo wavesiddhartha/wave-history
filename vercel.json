@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "frontend/index.html", "use": "@vercel/static" },
+    { "src": "frontend/static/**", "use": "@vercel/static" },
+    { "src": "api/**/*.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/token", "dest": "/api/token" },
+    { "src": "/api/(.*)", "dest": "/api/proxy/$1" },
+    { "src": "/static/(.*)", "dest": "/frontend/static/$1" },
+    { "src": "/", "dest": "/frontend/index.html" },
+    { "src": "/(.*)", "dest": "/frontend/index.html" }
+  ]
+}

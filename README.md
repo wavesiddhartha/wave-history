@@ -129,3 +129,23 @@ All `/api/*` endpoints except `/api/health` require header `X-Wave-Token` (the U
 - All raw history data is stored locally in SQLite.
 - API keys are read from environment variables. Do not hardcode secrets in code.
 - If an API key is exposed, rotate it immediately in the provider dashboard.
+
+## Deployment
+
+Local Docker (recommended for reproducible runs):
+
+```bash
+docker build -t wave:local .
+docker run --rm -p 8000:8000 -e WAVE_ENV=production -e WAVE_API_TOKEN=changeme -v "$PWD/data":/app/data wave:local
+```
+
+Docker Compose (quick start):
+
+```bash
+docker-compose up --build
+```
+
+GitHub: The repository includes a GitHub Actions workflow that builds and publishes a Docker image to GitHub Container Registry. To enable automatic Render deployments, set the `RENDER_API_KEY` and `RENDER_SERVICE_ID` repository secrets.
+
+Render: A `render.yaml` manifest is included. Connect your GitHub repo in Render, add `WAVE_ENV` and `WAVE_API_TOKEN` as service environment variables in the Render dashboard, and Render will pick up the Dockerfile on push.
+

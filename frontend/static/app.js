@@ -65,7 +65,20 @@ const el = {
   toast: document.getElementById("toast"),
 };
 
-const apiToken = typeof window !== "undefined" ? window.__WAVE_API_TOKEN__ || "" : "";
+let apiToken = "";
+
+async function fetchApiToken() {
+  try {
+    const res = await fetch('/api/token');
+    if (!res.ok) return;
+    const body = await res.json();
+    apiToken = body.token || "";
+  } catch (e) {
+    // ignore; keep token empty
+  }
+}
+
+fetchApiToken();
 const SAVED_KEY = "wave_saved_events_v1";
 const HISTORY_RENDER_LIMIT = 240;
 const COLLECTION_RULES = [

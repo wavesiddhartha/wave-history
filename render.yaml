@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: wave
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    buildCommand: ""
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port 8000"
+    envVars:
+      - key: WAVE_ENV
+        sync: false
+      - key: WAVE_API_TOKEN
+        sync: false

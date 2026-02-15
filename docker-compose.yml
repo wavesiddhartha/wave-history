@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      WAVE_ENV: production
+      # Replace with a secure token in production or set via CI/CD secrets
+      WAVE_API_TOKEN: changeme
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
