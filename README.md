@@ -43,6 +43,12 @@ You can tune Kimi behavior with `WAVE_AI_TEMPERATURE`, `WAVE_AI_TOP_P`, and `WAV
 uvicorn backend.app.main:app --reload --port 8080
 ```
 
+For platforms that auto-detect FastAPI from repo root, you can also run:
+
+```bash
+uvicorn main:app --reload --port 8080
+```
+
 4. Open the UI:
 
 - [http://127.0.0.1:8080](http://127.0.0.1:8080)
