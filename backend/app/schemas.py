@@ -57,6 +57,11 @@ class ReportRequest(BaseModel):
 class ReportDetails(BaseModel):
     narrative: str = ""
     deep_research_paper: str = ""
+    examination_summary: str = ""
+    examination_grade: str = ""
+    overall_score: int | None = None
+    scorecard: list[str] = Field(default_factory=list)
+    detailed_findings: list[str] = Field(default_factory=list)
     important_highlights: list[str] = Field(default_factory=list)
     key_facts: list[str] = Field(default_factory=list)
     behavior_patterns: list[str] = Field(default_factory=list)

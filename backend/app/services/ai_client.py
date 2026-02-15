@@ -60,6 +60,20 @@ def _safe_list(value: object, *, limit: int) -> list[str]:
     return clean
 
 
+def _safe_int(value: object, *, minimum: int = 0, maximum: int = 100) -> int | None:
+    if value is None:
+        return None
+    try:
+        parsed = int(round(float(str(value).strip())))
+    except (TypeError, ValueError):
+        return None
+    return max(minimum, min(maximum, parsed))
+
+
+def _clamp_score(value: float) -> int:
+    return max(0, min(100, int(round(value))))
+
+
 def _merge_unique_lists(*lists: list[str], limit: int) -> list[str]:
     merged: list[str] = []
     seen: set[str] = set()
@@ -76,6 +90,38 @@ def _merge_unique_lists(*lists: list[str], limit: int) -> list[str]:
             if len(merged) >= limit:
                 return merged
     return merged
+
+
+def _grade_from_score(score: int) -> str:
+    bands = [
+        (97, "A+"),
+        (93, "A"),
+        (90, "A-"),
+        (87, "B+"),
+        (83, "B"),
+        (80, "B-"),
+        (77, "C+"),
+        (73, "C"),
+        (70, "C-"),
+        (67, "D+"),
+        (63, "D"),
+        (60, "D-"),
+    ]
+    for floor, grade in bands:
+        if score >= floor:
+            return grade
+    return "F"
+
+
+def _is_search_event(event: HistoryEvent) -> bool:
+    hay = f"{event.domain} {event.url}".lower()
+    return "google." in hay or "search" in hay or "query=" in hay
+
+
+def _is_high_risk_event(event: HistoryEvent) -> bool:
+    hay = f"{event.domain} {event.url} {event.title}".lower()
+    risky_tokens = ("casino", "bet", "stake", "gambl", "porn", "xxx", "adult")
+    return any(token in hay for token in risky_tokens)
 
 
 def _event_category(event: HistoryEvent) -> str:
@@ -298,6 +344,137 @@ def _fallback_methodology(events: list[HistoryEvent]) -> list[str]:
     ]
 
 
+def _compute_examination_result(events: list[HistoryEvent], *, target_date: date) -> dict[str, object]:
+    if not events:
+        return {
+            "examination_grade": "N/A",
+            "overall_score": 0,
+            "examination_summary": (
+                f"Examination result for {target_date.isoformat()}: no captured events were available, "
+                "so scoring is not meaningful yet."
+            ),
+            "scorecard": [
+                "Focus Stability: 0/100 - no data available.",
+                "Research Depth: 0/100 - no data available.",
+                "Execution Discipline: 0/100 - no data available.",
+                "Consistency Hygiene: 0/100 - no data available.",
+                "Risk Hygiene: 0/100 - no data available.",
+                "Learning Momentum: 0/100 - no data available.",
+            ],
+            "detailed_findings": [
+                "No browsing events were captured for this date.",
+                "Run sync first, then regenerate the report to produce a full examination result.",
+            ],
+        }
+
+    ordered = sorted(events, key=lambda event: event.visited_at)
+    total = len(ordered)
+    domain_counts = Counter(event.domain for event in ordered if event.domain)
+    category_counts = Counter(_event_category(event) for event in ordered)
+    hour_counts = Counter(event.visited_at.hour for event in ordered)
+
+    switches = 0
+    for index in range(1, total):
+        if ordered[index].domain != ordered[index - 1].domain:
+            switches += 1
+    switch_rate_pct = (switches / max(1, total - 1)) * 100
+
+    social_count = category_counts.get("Social", 0)
+    video_count = category_counts.get("Video", 0)
+    work_count = category_counts.get("Work/Learning", 0)
+    late_night_count = sum(1 for event in ordered if event.visited_at.hour >= 23 or event.visited_at.hour < 5)
+    search_count = sum(1 for event in ordered if _is_search_event(event))
+    risky_count = sum(1 for event in ordered if _is_high_risk_event(event))
+    repeat_depth_domains = sum(1 for _, count in domain_counts.items() if count >= 4)
+
+    social_pct = (social_count / total) * 100
+    video_pct = (video_count / total) * 100
+    work_pct = (work_count / total) * 100
+    late_night_pct = (late_night_count / total) * 100
+    search_pct = (search_count / total) * 100
+    top_domain, top_domain_count = domain_counts.most_common(1)[0] if domain_counts else ("unknown", 0)
+    top_domain_share_pct = (top_domain_count / total) * 100
+    peak_hour, peak_hour_count = hour_counts.most_common(1)[0] if hour_counts else (0, 0)
+
+    focus_stability = _clamp_score(
+        100 - (switch_rate_pct * 0.55) - (social_pct * 0.22) - (video_pct * 0.14)
+    )
+    research_depth = _clamp_score(
+        20 + min(32, search_count * 1.4) + min(22, repeat_depth_domains * 4.5) + min(26, work_pct * 0.55)
+    )
+    execution_discipline = _clamp_score(
+        28 + min(36, work_pct * 0.65) + min(22, (100 - switch_rate_pct) * 0.25) + min(14, search_pct * 0.35)
+    )
+    consistency_hygiene = _clamp_score(
+        100 - min(38, late_night_pct * 0.95) - min(20, abs(top_domain_share_pct - 35) * 0.35)
+    )
+    risk_hygiene = _clamp_score(100 - min(78, risky_count * 12) - min(24, late_night_pct * 0.45))
+    learning_momentum = _clamp_score(
+        18 + min(38, work_pct * 0.75) + min(24, search_count * 1.1) + min(20, repeat_depth_domains * 3.3)
+    )
+
+    score_map = {
+        "Focus Stability": focus_stability,
+        "Research Depth": research_depth,
+        "Execution Discipline": execution_discipline,
+        "Consistency Hygiene": consistency_hygiene,
+        "Risk Hygiene": risk_hygiene,
+        "Learning Momentum": learning_momentum,
+    }
+    overall_score = _clamp_score(
+        focus_stability * 0.20
+        + research_depth * 0.20
+        + execution_discipline * 0.20
+        + consistency_hygiene * 0.15
+        + risk_hygiene * 0.15
+        + learning_momentum * 0.10
+    )
+    examination_grade = _grade_from_score(overall_score)
+
+    sorted_scores = sorted(score_map.items(), key=lambda pair: pair[1], reverse=True)
+    strongest = ", ".join(f"{name} ({score}/100)" for name, score in sorted_scores[:2])
+    weakest = ", ".join(f"{name} ({score}/100)" for name, score in sorted_scores[-2:])
+
+    start_time = ordered[0].visited_at.strftime("%I:%M %p")
+    end_time = ordered[-1].visited_at.strftime("%I:%M %p")
+    peak_hour_label = _format_hour_ampm(peak_hour)
+
+    examination_summary = (
+        f"Examination result for {target_date.isoformat()}: Grade {examination_grade} with overall score "
+        f"{overall_score}/100. Strongest dimensions were {strongest}. Lowest-scoring dimensions were {weakest}. "
+        f"Captured activity ran from {start_time} to {end_time}, with a peak around {peak_hour_label} "
+        f"({peak_hour_count} events)."
+    )
+
+    scorecard = [
+        f"Focus Stability: {focus_stability}/100 (domain-switch rate {round(switch_rate_pct)}%).",
+        f"Research Depth: {research_depth}/100 ({search_count} search events, {repeat_depth_domains} repeat-depth domains).",
+        f"Execution Discipline: {execution_discipline}/100 (Work/Learning share {round(work_pct)}%).",
+        f"Consistency Hygiene: {consistency_hygiene}/100 (late-night activity {late_night_count} events).",
+        f"Risk Hygiene: {risk_hygiene}/100 ({risky_count} high-risk indicators detected).",
+        f"Learning Momentum: {learning_momentum}/100 (search + work signals combined).",
+    ]
+
+    detailed_findings = [
+        f"Activity window: {start_time} to {end_time} across {total} events.",
+        f"Top domain concentration: {top_domain} at {round(top_domain_share_pct)}% of daily traffic.",
+        f"Context switching was {round(switch_rate_pct)}%, indicating {'high' if switch_rate_pct >= 55 else 'moderate' if switch_rate_pct >= 35 else 'low'} fragmentation.",
+        f"Search-led exploration contributed {search_count} events ({round(search_pct)}% of activity).",
+        f"Repeat-depth behavior: {repeat_depth_domains} domains were revisited at least 4 times.",
+        f"Category mix: Work/Learning {work_count}, Social {social_count}, Video {video_count}.",
+        f"Risk exposure markers: {risky_count} events matched high-risk browsing tokens.",
+        f"Late-night footprint: {late_night_count} events occurred between 11:00 PM and 5:00 AM.",
+    ]
+
+    return {
+        "examination_grade": examination_grade,
+        "overall_score": overall_score,
+        "examination_summary": examination_summary,
+        "scorecard": scorecard,
+        "detailed_findings": detailed_findings,
+    }
+
+
 def _fallback_deep_research_paper(
     *,
     target_date: date,
@@ -310,6 +487,9 @@ def _fallback_deep_research_paper(
     focus_gaps: list[str],
     risk_flags: list[str],
     recommendations: list[str],
+    examination_grade: str,
+    overall_score: int,
+    scorecard: list[str],
 ) -> str:
     if not events:
         return "No events available to generate a deep research paper."
@@ -368,6 +548,13 @@ def _fallback_deep_research_paper(
             + ". Executed consistently, these actions reduce tab churn, improve session continuity, and increase outcome quality."
         ),
         (
+            "Examination-style scoring synthesizes the day into an interpretable verdict: "
+            f"Grade {examination_grade} with overall score {overall_score}/100. "
+            "Primary scorecard indicators include: "
+            + "; ".join(scorecard[:4])
+            + ". This framing helps users compare day-over-day quality trends rather than only raw event volume."
+        ),
+        (
             "Conclusion: today's browsing behavior shows meaningful signals that can be shaped into higher-quality "
             "digital routines. The data supports a strategy of tighter session boundaries, deliberate revisit capture "
             "via bookmarks/notes, and focused windows aligned with peak attention periods."
@@ -384,6 +571,8 @@ def _input_statistics(events: list[HistoryEvent]) -> str:
 
 
 def generate_daily_report(target_date: date, events: list[HistoryEvent]) -> dict:
+    baseline_exam = _compute_examination_result(events, target_date=target_date)
+
     system_prompt = (
         "You are Wave, an internet activity analyst. "
         "Return valid JSON only with this schema: "
@@ -393,10 +582,14 @@ def generate_daily_report(target_date: date, events: list[HistoryEvent]) -> dict
         '"behavior_patterns": string[4-10], "time_insights": string[4-10], '
         '"category_insights": string[4-10], "intent_signals": string[4-10], '
         '"focus_gaps": string[3-10], "action_plan_7d": string[7-10], '
-        '"methodology_notes": string[3-8], "recommendations": string[4-10]}. '
+        '"methodology_notes": string[3-8], "recommendations": string[4-10], '
+        '"examination_summary": string, "examination_grade": string, '
+        '"overall_score": number(0-100), "scorecard": string[6-12], '
+        '"detailed_findings": string[6-14]}. '
         "Write a deep, long-form research report grounded only in provided events. "
         "The deep_research_paper must be 8-16 paragraphs and richly analytical. "
         "Use concrete observations, browsing rhythms, and practical recommendations. "
+        "Include an examination-result style verdict with grading and score interpretation. "
         "Use 12-hour clock format with AM/PM for every time reference. "
         "Put the most important items first in important_highlights. "
         "Mention privacy or security concerns only when strongly justified."
@@ -404,6 +597,10 @@ def generate_daily_report(target_date: date, events: list[HistoryEvent]) -> dict
     user_prompt = (
         f"Date: {target_date.isoformat()}\n"
         f"Total events: {len(events)}\n"
+        "Deterministic examination baseline:\n"
+        f"- Grade: {baseline_exam.get('examination_grade')}\n"
+        f"- Overall score: {baseline_exam.get('overall_score')}/100\n"
+        f"- Key scorecard signals: {'; '.join((baseline_exam.get('scorecard') or [])[:4])}\n"
         "Computed statistics:\n"
         f"{_input_statistics(events)}\n"
         "Events (newest first):\n"
@@ -420,7 +617,12 @@ def generate_daily_report(target_date: date, events: list[HistoryEvent]) -> dict
             client = OpenAI(
                 base_url=settings.ai_base_url,
                 api_key=settings.ai_api_key,
-                timeout=httpx.Timeout(connect=5.0, read=16.0, write=16.0, pool=5.0),
+                timeout=httpx.Timeout(
+                    connect=settings.ai_connect_timeout_sec,
+                    read=settings.ai_read_timeout_sec,
+                    write=max(5.0, settings.ai_connect_timeout_sec),
+                    pool=max(5.0, settings.ai_connect_timeout_sec),
+                ),
                 max_retries=0,
             )
 
@@ -491,6 +693,25 @@ def generate_daily_report(target_date: date, events: list[HistoryEvent]) -> dict
     intent_signals = _safe_list(parsed.get("intent_signals"), limit=10) or _fallback_intent_signals(events)
     focus_gaps = _safe_list(parsed.get("focus_gaps"), limit=10) or _fallback_focus_gaps(events)
     action_plan_7d = _safe_list(parsed.get("action_plan_7d"), limit=10) or _fallback_action_plan(events)
+    overall_score = _safe_int(parsed.get("overall_score"), minimum=0, maximum=100)
+    if overall_score is None:
+        overall_score = int(baseline_exam.get("overall_score") or 0)
+
+    examination_grade = _grade_from_score(overall_score)
+    examination_summary = _safe_text(parsed.get("examination_summary"))
+    if len(examination_summary) < 140:
+        examination_summary = str(baseline_exam.get("examination_summary") or "")
+
+    scorecard = _merge_unique_lists(
+        _safe_list(parsed.get("scorecard"), limit=12),
+        list(baseline_exam.get("scorecard") or []),
+        limit=12,
+    )
+    detailed_findings = _merge_unique_lists(
+        _safe_list(parsed.get("detailed_findings"), limit=14),
+        list(baseline_exam.get("detailed_findings") or []),
+        limit=14,
+    )
 
     deep_research_paper = _safe_text(parsed.get("deep_research_paper"))
     if len(deep_research_paper) < 900:
@@ -505,18 +726,21 @@ def generate_daily_report(target_date: date, events: list[HistoryEvent]) -> dict
             focus_gaps=focus_gaps,
             risk_flags=risk_flags,
             recommendations=recommendations,
+            examination_grade=examination_grade,
+            overall_score=overall_score,
+            scorecard=scorecard,
         )
     summary = _safe_text(parsed.get("summary"))
     if len(summary) < 120:
         summary = (
-            f"Wave captured {len(events)} events on {target_date.isoformat()} and generated a deep behavioral "
-            "analysis across intent, focus quality, and browsing patterns. "
+            f"Wave examination result for {target_date.isoformat()}: Grade {examination_grade} "
+            f"with overall score {overall_score}/100. "
             f"{key_facts[0] if key_facts else 'No key facts were available.'}"
         )
 
     narrative = _safe_text(parsed.get("narrative"))
     if len(narrative) < 300:
-        narrative = deep_research_paper[:3200]
+        narrative = f"{examination_summary}\n\n{deep_research_paper[:2800]}"
 
     methodology_notes = _safe_list(parsed.get("methodology_notes"), limit=8) or _fallback_methodology(events)
     if model_warning:
@@ -535,6 +759,11 @@ def generate_daily_report(target_date: date, events: list[HistoryEvent]) -> dict
         "details": {
             "narrative": narrative,
             "deep_research_paper": deep_research_paper,
+            "examination_summary": examination_summary,
+            "examination_grade": examination_grade,
+            "overall_score": overall_score,
+            "scorecard": scorecard,
+            "detailed_findings": detailed_findings,
             "important_highlights": important_highlights,
             "key_facts": key_facts,
             "behavior_patterns": behavior_patterns,

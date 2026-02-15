@@ -53,6 +53,16 @@ uvicorn main:app --reload --port 8080
 
 - [http://127.0.0.1:8080](http://127.0.0.1:8080)
 
+## Production run
+
+For non-dev deployment, avoid `--reload` and set a fixed API token:
+
+```bash
+export WAVE_ENV=production
+export WAVE_API_TOKEN="replace_with_long_random_secret"
+uvicorn backend.app.main:app --host 0.0.0.0 --port 8080 --workers 2
+```
+
 ## Security defaults
 
 - API endpoints require a per-run token (`X-Wave-Token`) injected into the served UI.
@@ -60,6 +70,9 @@ uvicorn main:app --reload --port 8080
 - CORS is restricted to `localhost`/`127.0.0.1` origins.
 - Stored URLs are sanitized to remove sensitive query parameters/fragments before persistence.
 - AI report prompts include redacted event lines (no raw full URLs).
+- Rate limiting is enabled on `/api/*` (except `/api/health`) by default.
+- Every response includes a request id header (`X-Request-ID`) for traceability.
+- Security headers and CSP are enabled on app responses.
 
 ## macOS permissions required
 
@@ -74,6 +87,7 @@ Without permission, the app still runs, but sync may show browser-specific error
 
 All `/api/*` endpoints except `/api/health` require header `X-Wave-Token` (the UI injects this automatically).
 
+- `GET /api/health` - service health, environment and uptime
 - `POST /api/sync` - ingest browser history  
   request options:
   - `lookback_hours` (default `24`)

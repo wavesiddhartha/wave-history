@@ -5,6 +5,7 @@ import sqlite3
 from datetime import date, datetime
 from pathlib import Path
 
+from backend.app.config import settings
 from backend.app.schemas import HistoryEvent
 from backend.app.services.privacy import domain_from_url, redact_text, sanitize_url
 
@@ -17,14 +18,23 @@ class WaveStorage:
         self._init_db()
 
     def _connect(self) -> sqlite3.Connection:
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(
+            self.db_path,
+            timeout=max(0.5, settings.sqlite_busy_timeout_ms / 1000.0),
+        )
         conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA foreign_keys = ON")
+        conn.execute(f"PRAGMA busy_timeout = {settings.sqlite_busy_timeout_ms}")
         return conn
 
     def _init_db(self) -> None:
         with self._connect() as conn:
             conn.executescript(
                 """
+                PRAGMA journal_mode = WAL;
+                PRAGMA synchronous = NORMAL;
+                PRAGMA temp_store = MEMORY;
+
                 CREATE TABLE IF NOT EXISTS history_events (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     browser TEXT NOT NULL,
@@ -39,6 +49,10 @@ class WaveStorage:
 
                 CREATE INDEX IF NOT EXISTS idx_history_visited_at ON history_events(visited_at);
                 CREATE INDEX IF NOT EXISTS idx_history_domain ON history_events(domain);
+                CREATE INDEX IF NOT EXISTS idx_history_date ON history_events(substr(visited_at, 1, 10));
+                CREATE INDEX IF NOT EXISTS idx_history_title_lower ON history_events(lower(title));
+                CREATE INDEX IF NOT EXISTS idx_history_url_lower ON history_events(lower(url));
+                CREATE INDEX IF NOT EXISTS idx_history_domain_lower ON history_events(lower(domain));
 
                 CREATE TABLE IF NOT EXISTS daily_reports (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,

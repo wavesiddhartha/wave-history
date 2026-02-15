@@ -3,341 +3,275 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wave - Personal Web Memory</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/static/styles.css" />
+    <title>Wave</title>
+    <link rel="stylesheet" href="/static/styles.css?v=__WAVE_ASSET_VERSION__" />
   </head>
   <body>
-    <header class="toolbar">
-      <div class="toolbar-content">
-        <div class="toolbar-left">
-          <div class="toolbar-logo">
-            <div class="toolbar-logo-icon">W</div>
-            <span class="toolbar-title">Wave</span>
-          </div>
-          <p class="toolbar-subtitle">Personal Web Memory</p>
-        </div>
-
-        <div class="toolbar-actions">
-          <button id="permissionBtn" class="toolbar-btn secondary" type="button"><span class="btn-icon">◎</span>Access</button>
-          <button id="syncBtn" class="toolbar-btn" type="button"><span class="btn-icon">↻</span>Sync Now</button>
-          <button id="powerBtn" class="toolbar-btn power" type="button"><span class="btn-icon">⚡</span>Power Sync</button>
-          <button id="safariFullBtn" class="toolbar-btn secondary" type="button"><span class="btn-icon">⌂</span>Import Safari</button>
-          <button id="liveBtn" class="toolbar-btn secondary" type="button"><span class="btn-icon">◉</span>Live: Off</button>
-          <button id="reportBtn" class="toolbar-btn" type="button"><span class="btn-icon">✦</span>AI Report</button>
+    <nav class="nav">
+      <div class="nav-inner">
+        <div class="nav-brand">Wave</div>
+        <div class="nav-actions">
+          <button id="settingsBtn" class="btn btn-secondary" type="button">Settings</button>
+          <button id="historyBtn" class="btn btn-secondary" type="button">History</button>
+          <button id="searchBtn" class="btn btn-secondary" type="button">Search</button>
+          <button id="syncBtn" class="btn btn-primary" type="button">Sync Now</button>
         </div>
       </div>
-    </header>
+    </nav>
 
-    <div class="container">
-      <aside class="sidebar">
-        <section class="sidebar-section">
-          <h2 class="sidebar-header">Favorites</h2>
-          <button class="sidebar-item nav-item active" data-nav="home" type="button">
-            <span class="sidebar-icon">⌂</span>
-            <span>Home</span>
-            <span class="sidebar-badge" id="homeCount">0</span>
-          </button>
-          <button class="sidebar-item nav-item" data-nav="history" type="button">
-            <span class="sidebar-icon">◷</span>
-            <span>History</span>
-          </button>
-          <button class="sidebar-item nav-item" data-nav="saved" type="button">
-            <span class="sidebar-icon">★</span>
-            <span>Saved</span>
-            <span class="sidebar-badge" id="savedCount">0</span>
-          </button>
-          <button class="sidebar-item nav-item" data-nav="ai" type="button">
-            <span class="sidebar-icon">✦</span>
-            <span>AI Report</span>
-          </button>
-        </section>
+    <main class="main">
+      <section class="hero">
+        <div class="hero-label">Daily Intelligence</div>
+        <h1 id="heroEvents" class="hero-title">0</h1>
+        <p id="heroSubtitle" class="hero-subtitle">Events captured on -</p>
+      </section>
 
-        <section class="sidebar-section">
-          <h2 class="sidebar-header">Browsers</h2>
-          <button class="sidebar-item browser-filter active" data-browser="all" type="button">
-            <span class="sidebar-icon">◎</span>
-            <span>All Browsers</span>
-            <span class="sidebar-badge" id="browserAllCount">0</span>
-          </button>
-          <button class="sidebar-item browser-filter" data-browser="safari" type="button">
-            <span class="sidebar-icon">◍</span>
-            <span>Safari</span>
-            <span class="sidebar-badge" id="browserSafariCount">0</span>
-          </button>
-          <button class="sidebar-item browser-filter" data-browser="brave" type="button">
-            <span class="sidebar-icon">◆</span>
-            <span>Brave</span>
-            <span class="sidebar-badge" id="browserBraveCount">0</span>
-          </button>
-          <button class="sidebar-item browser-filter" data-browser="chrome" type="button">
-            <span class="sidebar-icon">●</span>
-            <span>Chrome</span>
-            <span class="sidebar-badge" id="browserChromeCount">0</span>
-          </button>
-        </section>
-
-        <section class="sidebar-section">
-          <h2 class="sidebar-header">Collections</h2>
-          <button class="sidebar-item collection-filter active" data-collection="all" type="button">
-            <span class="sidebar-icon">◉</span>
-            <span>All</span>
-          </button>
-          <button class="sidebar-item collection-filter" data-collection="videos" type="button">
-            <span class="sidebar-icon">▶</span>
-            <span>Videos</span>
-          </button>
-          <button class="sidebar-item collection-filter" data-collection="articles" type="button">
-            <span class="sidebar-icon">▤</span>
-            <span>Articles</span>
-          </button>
-          <button class="sidebar-item collection-filter" data-collection="shopping" type="button">
-            <span class="sidebar-icon">▣</span>
-            <span>Shopping</span>
-          </button>
-          <button class="sidebar-item collection-filter" data-collection="social" type="button">
-            <span class="sidebar-icon">◇</span>
-            <span>Social</span>
-          </button>
-        </section>
-
-        <section class="capture-card">
-          <h2 class="sidebar-header">Capture Window</h2>
-          <div class="capture-controls">
-            <label>
-              <span>From</span>
-              <select id="startHour"></select>
-            </label>
-            <label>
-              <span>To</span>
-              <select id="endHour"></select>
-            </label>
+      <div class="stats">
+        <article class="stat">
+          <div class="stat-content">
+            <div id="totalEvents" class="stat-value">0</div>
+            <div class="stat-label">Events</div>
+            <div class="stat-meta">Today</div>
           </div>
-          <p class="capture-hint" id="captureHint">All day (12:00 AM to 12:00 AM)</p>
-          <div class="capture-action-row">
-            <button id="captureWindowBtn" class="toolbar-btn" type="button"><span class="btn-icon">⧖</span>Capture This Window</button>
-            <button id="deleteWindowBtn" class="toolbar-btn secondary danger" type="button">Delete This Window</button>
-            <button id="clearHistoryBtn" class="toolbar-btn secondary danger" type="button">Delete Wave Data</button>
+        </article>
+        <article class="stat">
+          <div class="stat-content">
+            <div id="syncedBrowsers" class="stat-value">0</div>
+            <div class="stat-label">Browsers</div>
+            <div class="stat-meta">Synced</div>
           </div>
-          <p class="permission-text" id="permissionText">
-            Wave checks Safari and Chromium access from your current terminal session.
+        </article>
+        <article class="stat">
+          <div class="stat-content">
+            <div id="capturedEvents" class="stat-value">0</div>
+            <div class="stat-label">Captured</div>
+            <div id="captureRange" class="stat-meta">-</div>
+          </div>
+        </article>
+        <article class="stat">
+          <div class="stat-content">
+            <div id="savedLinks" class="stat-value">0</div>
+            <div class="stat-label">Saved</div>
+            <div class="stat-meta">Links</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="status">
+        <div class="status-item">
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span id="lastAction">Ready</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <div id="statusSyncAt" class="status-value">-</div>
+          <div class="status-label">Last Sync</div>
+        </div>
+        <div class="status-item">
+          <div id="statusDay" class="status-value">-</div>
+          <div class="status-label">Active Day</div>
+        </div>
+      </div>
+
+      <section class="health">
+        <header class="health-header">
+          <h3 class="health-title">Live Health</h3>
+          <div id="latestEventAt" class="health-timestamp">Latest: -</div>
+        </header>
+        <div class="health-grid">
+          <article class="health-item">
+            <div class="health-label">Freshness</div>
+            <div id="freshnessStatus" class="health-value dash">-</div>
+          </article>
+          <article class="health-item">
+            <div class="health-label">Last Sync</div>
+            <div id="lastSyncAt" class="health-value dash">-</div>
+          </article>
+          <article class="health-item">
+            <div class="health-label">New Events</div>
+            <div id="lastSyncInserted" class="health-value">0</div>
+          </article>
+          <article class="health-item">
+            <div class="health-label">Active Day</div>
+            <div id="activeDay" class="health-value">-</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <header class="section-header">
+          <div class="section-label">AI Analysis</div>
+          <h2 class="section-title">Daily Intelligence Report</h2>
+          <p class="section-subtitle">
+            Comprehensive behavioral analysis of your browsing patterns, automatically generated from captured events.
           </p>
-        </section>
-      </aside>
-
-      <main class="main-content">
-        <section class="stats-grid">
-          <article class="stat-card">
-            <div class="stat-header">
-              <p class="stat-label">Events Today</p>
-            </div>
-            <p class="stat-value" id="totalEvents">0</p>
-            <p class="stat-meta" id="searchMeta">Ready</p>
-          </article>
-
-          <article class="stat-card">
-            <div class="stat-header">
-              <p class="stat-label">Browsers Synced</p>
-            </div>
-            <p class="stat-value" id="syncedBrowsers">0</p>
-            <p class="stat-meta">Profiles detected</p>
-          </article>
-
-          <article class="stat-card">
-            <div class="stat-header">
-              <p class="stat-label">Sync Status</p>
-            </div>
-            <p class="stat-value status" id="lastAction">Ready</p>
-            <p class="stat-meta" id="modelName">Model: -</p>
-          </article>
-
-          <article class="stat-card">
-            <div class="stat-header">
-              <p class="stat-label">Saved Links</p>
-            </div>
-            <p class="stat-value" id="savedStat">0</p>
-            <p class="stat-meta">Local favorites</p>
-          </article>
-        </section>
-
-        <section class="panel-card health-strip">
-          <header>
-            <h2>Live Health</h2>
-            <span class="panel-count" id="latestEventAt">Latest: -</span>
-          </header>
-          <div class="health-grid">
-            <article class="health-item">
-              <p class="health-label">Freshness</p>
-              <p class="health-value" id="freshnessStatus" data-level="none">No Data</p>
-            </article>
-            <article class="health-item">
-              <p class="health-label">Last Sync</p>
-              <p class="health-value" id="lastSyncAt">-</p>
-            </article>
-            <article class="health-item">
-              <p class="health-label">New Events</p>
-              <p class="health-value" id="lastSyncInserted">0</p>
-            </article>
-            <article class="health-item">
-              <p class="health-label">Active Day</p>
-              <p class="health-value" id="activeDay">-</p>
-            </article>
+          <div class="section-actions">
+            <button id="reportRefreshBtn" class="btn btn-secondary" type="button">Refresh Analysis</button>
+            <button id="previewReportBtn" class="btn btn-secondary" type="button">Preview Report</button>
+            <button id="downloadReportBtn" class="btn btn-primary" type="button">Download PDF</button>
           </div>
-        </section>
+        </header>
 
-        <section class="panel-card report-panel report-priority" id="reportPanel">
-          <header>
-            <h2>AI Deep Daily Report</h2>
-            <div class="report-actions">
-              <button id="reportRefreshBtn" class="toolbar-btn secondary mini" type="button">Refresh Analysis</button>
-              <button id="downloadReportBtn" class="toolbar-btn mini" type="button">Download PDF</button>
-            </div>
-          </header>
-          <p class="report-tagline">Wave analyzes everything captured today and generates a detailed behavioral intelligence report.</p>
-          <p id="reportSummary" class="report-summary">Click AI Report to generate today's summary.</p>
-          <div class="report-meta-row">
-            <span id="reportDateBadge" class="chip chip-neutral">Date: -</span>
-            <span id="reportEventsBadge" class="chip chip-neutral">Events: 0</span>
-          </div>
-          <div class="report-grid">
-            <div>
-              <h3>Important Highlights</h3>
-              <ul id="importantHighlightList"></ul>
-            </div>
-            <div>
-              <h3>Key Facts</h3>
-              <ul id="keyFactList"></ul>
-            </div>
-            <div>
-              <h3>Highlights</h3>
-              <ul id="highlightList"></ul>
-            </div>
-            <div>
-              <h3>Behavior Patterns</h3>
-              <ul id="patternList"></ul>
-            </div>
-            <div>
-              <h3>Time Insights</h3>
-              <ul id="timeInsightList"></ul>
-            </div>
-            <div>
-              <h3>Category Insights</h3>
-              <ul id="categoryInsightList"></ul>
-            </div>
-            <div>
-              <h3>Risk Flags</h3>
-              <ul id="riskList"></ul>
-            </div>
-            <div>
-              <h3>Recommendations</h3>
-              <ul id="recommendationList"></ul>
-            </div>
-            <div>
-              <h3>Intent Signals</h3>
-              <ul id="intentSignalList"></ul>
-            </div>
-            <div>
-              <h3>Focus Gaps</h3>
-              <ul id="focusGapList"></ul>
-            </div>
-            <div>
-              <h3>7-Day Action Plan</h3>
-              <ul id="actionPlanList"></ul>
-            </div>
-            <div>
-              <h3>Methodology Notes</h3>
-              <ul id="methodologyList"></ul>
-            </div>
-          </div>
-          <article class="deep-research-paper">
-            <h3>Deep Research Paper</h3>
-            <p id="deepResearchPaper">
-              Generate AI report to produce a long, in-depth research paper for today.
+        <article class="report">
+          <div id="reportBody">
+            <p>
+              Wave captures your browser events and builds a detailed examination-result report from today's activity.
+              Click <strong>Refresh Analysis</strong> to generate the latest deep analysis.
             </p>
-          </article>
-          <details>
-            <summary>Reasoning Trace</summary>
-            <pre id="reasoningTrace">No reasoning trace yet.</pre>
-          </details>
-        </section>
-
-        <section class="search-panel">
-          <label class="search-input-wrapper" aria-label="Search history">
-            <svg class="search-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
-            <input id="searchInputPanel" type="text" placeholder="Search your history, sites, links..." />
-          </label>
-          <div class="search-actions">
-            <button id="searchBtn" class="toolbar-btn" type="button">Search</button>
-            <button id="clearSearchBtn" class="toolbar-btn secondary" type="button">Clear</button>
           </div>
-
-          <div class="filter-pills" id="filterPills">
-            <button class="filter-pill active" data-collection="all" type="button">All Results</button>
-            <button class="filter-pill" data-collection="videos" type="button">Videos</button>
-            <button class="filter-pill" data-collection="articles" type="button">Articles</button>
-            <button class="filter-pill" data-collection="shopping" type="button">Shopping</button>
-            <button class="filter-pill" data-collection="social" type="button">Social</button>
-          </div>
-        </section>
-
-        <section class="panel-card window-capture-panel" id="windowCapturePanel">
-          <header>
-            <h2>Captured In Window</h2>
-            <div class="panel-tools">
-              <span class="panel-count" id="windowCaptureCount">0</span>
-              <button id="clearWindowCaptureBtn" class="toolbar-btn secondary mini" type="button">Remove</button>
+          <footer class="report-footer">
+            <div class="report-meta">
+              <strong id="reportMetaEvents">0</strong>
+              Events
             </div>
-          </header>
-          <div id="windowCaptureList" class="window-capture-list"></div>
+            <div class="report-meta">
+              <strong id="reportMetaDate">-</strong>
+              Date
+            </div>
+            <div class="report-meta">
+              <strong id="reportMetaModel">-</strong>
+              Model
+            </div>
+          </footer>
+        </article>
+      </section>
+    </main>
+
+    <div id="settingsModal" class="modal" hidden>
+      <div class="modal-backdrop" data-close-modal="true"></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <div class="modal-header">
+          <h3 id="settingsTitle">Capture Window</h3>
+          <button id="closeSettingsBtn" class="btn btn-secondary" type="button">Close</button>
+        </div>
+
+        <div class="modal-grid">
+          <label>
+            From
+            <select id="startHour"></select>
+          </label>
+          <label>
+            To
+            <select id="endHour"></select>
+          </label>
+        </div>
+        <p id="captureHint" class="capture-hint">All day (12:00 AM to 12:00 AM)</p>
+
+        <div class="modal-actions">
+          <button id="permissionBtn" class="btn btn-secondary" type="button">Check Access</button>
+          <button id="captureWindowBtn" class="btn btn-primary" type="button">Capture This Window</button>
+          <button id="deleteWindowBtn" class="btn btn-secondary danger" type="button">Delete This Window</button>
+          <button id="clearHistoryBtn" class="btn btn-secondary danger" type="button">Delete Wave Data</button>
+        </div>
+
+        <p id="permissionText" class="modal-help">Wave checks Safari and Chromium access from your current terminal session.</p>
+      </div>
+    </div>
+
+    <div id="historyModal" class="modal" hidden>
+      <div class="modal-backdrop" data-close-history="true"></div>
+      <div class="modal-card modal-card-history" role="dialog" aria-modal="true" aria-labelledby="historyTitle">
+        <div class="modal-header">
+          <h3 id="historyTitle">History Center</h3>
+          <button id="closeHistoryBtn" class="btn btn-secondary" type="button">Close</button>
+        </div>
+
+        <div class="history-toolbar">
+          <div class="history-tabs" role="tablist" aria-label="History Views">
+            <button class="history-tab active" data-history-tab="history" type="button">
+              History
+              <span id="historyTabCount" class="history-tab-count">0</span>
+            </button>
+            <button class="history-tab" data-history-tab="collections" type="button">
+              Collections
+              <span id="collectionsTabCount" class="history-tab-count">0</span>
+            </button>
+            <button class="history-tab" data-history-tab="saved" type="button">
+              Saved
+              <span id="savedTabCount" class="history-tab-count">0</span>
+            </button>
+          </div>
+          <label class="history-search-wrap" aria-label="Search history">
+            <input id="historySearchInput" type="text" placeholder="Search title, domain, URL..." />
+          </label>
+        </div>
+
+        <p id="historyMeta" class="history-meta">Showing 0 items.</p>
+        <div id="historyPanel" class="history-panel"></div>
+      </div>
+    </div>
+
+    <div id="searchModal" class="modal" hidden>
+      <div class="modal-backdrop" data-close-search="true"></div>
+      <div class="modal-card modal-card-search" role="dialog" aria-modal="true" aria-labelledby="searchTitle">
+        <div class="modal-header">
+          <h3 id="searchTitle">Search Intelligence</h3>
+          <button id="closeSearchBtn" class="btn btn-secondary" type="button">Close</button>
+        </div>
+
+        <form id="searchForm" class="search-form">
+          <label class="search-input-wrap" aria-label="Search in history">
+            <input id="searchInput" type="text" placeholder="Search history and get analyzed results..." />
+          </label>
+          <button id="searchRunBtn" class="btn btn-primary" type="submit">Search</button>
+        </form>
+        <p id="searchMeta" class="search-meta">Analysis uses only Wave-captured history.</p>
+
+        <section class="search-insight-card">
+          <h4>History-Only Analysis</h4>
+          <div id="searchInsight" class="search-insight">
+            <p>Run a search to see analyzed insights from your browsing history data.</p>
+          </div>
         </section>
 
-        <section class="results-header">
+        <section class="search-sections">
           <div>
-            <h1 class="results-title" id="resultsTitle">History Feed</h1>
-            <p class="results-count" id="resultCount">0 results</p>
+            <h4 class="search-section-title">Matching Results</h4>
+            <div id="searchResultsPanel" class="history-panel search-panel"></div>
           </div>
-          <div class="view-controls">
-            <button class="view-btn active" type="button" data-view="list" aria-label="List view">L</button>
-            <button class="view-btn" type="button" data-view="grid" aria-label="Grid view">G</button>
-            <button class="view-btn" type="button" data-view="compact" aria-label="Compact view">C</button>
+          <div>
+            <h4 class="search-section-title">Similar Links</h4>
+            <div id="searchSimilarPanel" class="history-panel search-panel"></div>
           </div>
         </section>
+      </div>
+    </div>
 
-        <section class="history-list" id="historyList"></section>
+    <div id="reportPreviewModal" class="modal" hidden>
+      <div class="modal-backdrop" data-close-preview="true"></div>
+      <div class="modal-card modal-card-preview" role="dialog" aria-modal="true" aria-labelledby="reportPreviewTitle">
+        <div class="modal-header preview-header">
+          <div class="preview-title-wrap">
+            <h3 id="reportPreviewTitle">AI Report Preview</h3>
+            <p id="previewMeta" class="modal-help preview-meta">Preparing preview...</p>
+          </div>
+          <div class="preview-actions">
+            <button id="previewDownloadBtn" class="btn btn-primary" type="button">Download PDF</button>
+            <button id="closePreviewBtn" class="btn btn-secondary" type="button">Close</button>
+          </div>
+        </div>
 
-        <section class="panel-grid">
-          <article class="panel-card">
-            <header>
-              <h2>Similar Links</h2>
-              <span class="panel-count" id="similarCount">0</span>
-            </header>
-            <div id="similarResults" class="similar-list"></div>
-          </article>
+        <div class="preview-mode-switch" role="tablist" aria-label="Preview mode">
+          <button id="previewReadableBtn" class="preview-mode-btn active" type="button">Readable View</button>
+          <button id="previewPdfBtn" class="preview-mode-btn" type="button">PDF Pages</button>
+        </div>
 
-          <article class="panel-card">
-            <header>
-              <h2>Top Domains</h2>
-              <span class="panel-count" id="domainHint">0</span>
-            </header>
-            <div id="domainList" class="chips"></div>
-          </article>
-        </section>
+        <div id="previewReadable" class="preview-readable">
+          <p>Wave will show your detailed AI report in an easy reading format here.</p>
+        </div>
 
-      </main>
+        <div id="previewPdfPanel" class="preview-viewer" hidden>
+          <iframe id="reportPreviewFrame" title="Wave AI Report PDF Preview"></iframe>
+        </div>
+      </div>
     </div>
 
     <div id="toast" class="toast"></div>
+
     <script>
-      window.__WAVE_API_TOKEN__ = "__WAVE_API_TOKEN_VALUE__";
+      window.__WAVE_API_TOKEN__ = __WAVE_API_TOKEN_JSON__;
     </script>
-    <script type="module" src="/static/app.js"></script>
+    <script type="module" src="/static/app.js?v=__WAVE_ASSET_VERSION__"></script>
   </body>
 </html>

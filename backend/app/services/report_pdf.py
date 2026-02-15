@@ -52,6 +52,16 @@ def _to_lines(report: dict[str, Any]) -> list[str]:
 
     summary = str(report.get("summary") or "No summary available.").strip()
     lines.extend(textwrap.wrap(summary, width=MAX_CHARS_PER_LINE) or ["No summary available."])
+    lines.extend(["", "Examination Result"])
+    exam_grade = str(details.get("examination_grade") or "-").strip()
+    exam_score = details.get("overall_score")
+    exam_score_text = "-"
+    if isinstance(exam_score, (int, float)):
+        exam_score_text = str(int(round(exam_score)))
+    lines.append(f"Grade: {exam_grade}")
+    lines.append(f"Overall Score: {exam_score_text}/100")
+    exam_summary = str(details.get("examination_summary") or "").strip()
+    lines.extend(textwrap.wrap(exam_summary, width=MAX_CHARS_PER_LINE) or ["No examination summary available."])
     lines.extend(["", "Detailed Narrative"])
 
     narrative = str(details.get("narrative") or "").strip()
@@ -61,6 +71,8 @@ def _to_lines(report: dict[str, Any]) -> list[str]:
     lines.extend(textwrap.wrap(deep_paper, width=MAX_CHARS_PER_LINE) or ["No deep research paper available."])
 
     section_map = [
+        ("Scorecard", _as_list(details.get("scorecard"))),
+        ("Detailed Findings", _as_list(details.get("detailed_findings"))),
         ("Important Highlights", _as_list(details.get("important_highlights"))),
         ("Key Facts", _as_list(details.get("key_facts"))),
         ("Highlights", _as_list(report.get("highlights"))),

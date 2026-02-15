@@ -1,110 +1,237 @@
 const el = {
   syncBtn: document.getElementById("syncBtn"),
-  safariFullBtn: document.getElementById("safariFullBtn"),
-  liveBtn: document.getElementById("liveBtn"),
-  powerBtn: document.getElementById("powerBtn"),
-  reportBtn: document.getElementById("reportBtn"),
+  settingsBtn: document.getElementById("settingsBtn"),
+  historyBtn: document.getElementById("historyBtn"),
+  searchBtn: document.getElementById("searchBtn"),
   reportRefreshBtn: document.getElementById("reportRefreshBtn"),
+  previewReportBtn: document.getElementById("previewReportBtn"),
   downloadReportBtn: document.getElementById("downloadReportBtn"),
+  closeSettingsBtn: document.getElementById("closeSettingsBtn"),
+  settingsModal: document.getElementById("settingsModal"),
+  historyModal: document.getElementById("historyModal"),
+  searchModal: document.getElementById("searchModal"),
+  reportPreviewModal: document.getElementById("reportPreviewModal"),
+  closeHistoryBtn: document.getElementById("closeHistoryBtn"),
+  closeSearchBtn: document.getElementById("closeSearchBtn"),
+  searchForm: document.getElementById("searchForm"),
+  searchInput: document.getElementById("searchInput"),
+  searchRunBtn: document.getElementById("searchRunBtn"),
+  searchMeta: document.getElementById("searchMeta"),
+  searchInsight: document.getElementById("searchInsight"),
+  searchResultsPanel: document.getElementById("searchResultsPanel"),
+  searchSimilarPanel: document.getElementById("searchSimilarPanel"),
+  closePreviewBtn: document.getElementById("closePreviewBtn"),
+  previewDownloadBtn: document.getElementById("previewDownloadBtn"),
+  previewReadableBtn: document.getElementById("previewReadableBtn"),
+  previewPdfBtn: document.getElementById("previewPdfBtn"),
+  previewPdfPanel: document.getElementById("previewPdfPanel"),
+  previewMeta: document.getElementById("previewMeta"),
+  previewReadable: document.getElementById("previewReadable"),
+  reportPreviewFrame: document.getElementById("reportPreviewFrame"),
+  historySearchInput: document.getElementById("historySearchInput"),
+  historyMeta: document.getElementById("historyMeta"),
+  historyPanel: document.getElementById("historyPanel"),
+  historyTabCount: document.getElementById("historyTabCount"),
+  collectionsTabCount: document.getElementById("collectionsTabCount"),
+  savedTabCount: document.getElementById("savedTabCount"),
   permissionBtn: document.getElementById("permissionBtn"),
-  clearHistoryBtn: document.getElementById("clearHistoryBtn"),
   captureWindowBtn: document.getElementById("captureWindowBtn"),
   deleteWindowBtn: document.getElementById("deleteWindowBtn"),
-  clearWindowCaptureBtn: document.getElementById("clearWindowCaptureBtn"),
-  clearSearchBtn: document.getElementById("clearSearchBtn"),
-  searchBtn: document.getElementById("searchBtn"),
-  searchInputPanel: document.getElementById("searchInputPanel"),
+  clearHistoryBtn: document.getElementById("clearHistoryBtn"),
   permissionText: document.getElementById("permissionText"),
   captureHint: document.getElementById("captureHint"),
   startHour: document.getElementById("startHour"),
   endHour: document.getElementById("endHour"),
+  heroEvents: document.getElementById("heroEvents"),
+  heroSubtitle: document.getElementById("heroSubtitle"),
   totalEvents: document.getElementById("totalEvents"),
+  syncedBrowsers: document.getElementById("syncedBrowsers"),
+  capturedEvents: document.getElementById("capturedEvents"),
+  captureRange: document.getElementById("captureRange"),
+  savedLinks: document.getElementById("savedLinks"),
+  lastAction: document.getElementById("lastAction"),
+  statusSyncAt: document.getElementById("statusSyncAt"),
+  statusDay: document.getElementById("statusDay"),
   latestEventAt: document.getElementById("latestEventAt"),
   freshnessStatus: document.getElementById("freshnessStatus"),
   lastSyncAt: document.getElementById("lastSyncAt"),
   lastSyncInserted: document.getElementById("lastSyncInserted"),
   activeDay: document.getElementById("activeDay"),
-  syncedBrowsers: document.getElementById("syncedBrowsers"),
-  lastAction: document.getElementById("lastAction"),
-  modelName: document.getElementById("modelName"),
-  searchMeta: document.getElementById("searchMeta"),
-  resultCount: document.getElementById("resultCount"),
-  resultsTitle: document.getElementById("resultsTitle"),
-  historyList: document.getElementById("historyList"),
-  similarResults: document.getElementById("similarResults"),
-  similarCount: document.getElementById("similarCount"),
-  domainList: document.getElementById("domainList"),
-  domainHint: document.getElementById("domainHint"),
-  reportSummary: document.getElementById("reportSummary"),
-  reportDateBadge: document.getElementById("reportDateBadge"),
-  reportEventsBadge: document.getElementById("reportEventsBadge"),
-  importantHighlightList: document.getElementById("importantHighlightList"),
-  keyFactList: document.getElementById("keyFactList"),
-  highlightList: document.getElementById("highlightList"),
-  patternList: document.getElementById("patternList"),
-  timeInsightList: document.getElementById("timeInsightList"),
-  categoryInsightList: document.getElementById("categoryInsightList"),
-  recommendationList: document.getElementById("recommendationList"),
-  riskList: document.getElementById("riskList"),
-  intentSignalList: document.getElementById("intentSignalList"),
-  focusGapList: document.getElementById("focusGapList"),
-  actionPlanList: document.getElementById("actionPlanList"),
-  methodologyList: document.getElementById("methodologyList"),
-  deepResearchPaper: document.getElementById("deepResearchPaper"),
-  reasoningTrace: document.getElementById("reasoningTrace"),
-  reportPanel: document.getElementById("reportPanel"),
-  windowCaptureList: document.getElementById("windowCaptureList"),
-  windowCaptureCount: document.getElementById("windowCaptureCount"),
-  savedStat: document.getElementById("savedStat"),
-  homeCount: document.getElementById("homeCount"),
-  savedCount: document.getElementById("savedCount"),
-  browserAllCount: document.getElementById("browserAllCount"),
-  browserSafariCount: document.getElementById("browserSafariCount"),
-  browserBraveCount: document.getElementById("browserBraveCount"),
-  browserChromeCount: document.getElementById("browserChromeCount"),
+  reportBody: document.getElementById("reportBody"),
+  reportMetaEvents: document.getElementById("reportMetaEvents"),
+  reportMetaDate: document.getElementById("reportMetaDate"),
+  reportMetaModel: document.getElementById("reportMetaModel"),
+  historyTabs: Array.from(document.querySelectorAll(".history-tab")),
   toast: document.getElementById("toast"),
-  viewButtons: Array.from(document.querySelectorAll(".view-btn")),
-  navButtons: Array.from(document.querySelectorAll(".nav-item")),
-  browserFilterButtons: Array.from(document.querySelectorAll(".browser-filter")),
-  collectionFilterButtons: Array.from(document.querySelectorAll(".collection-filter")),
-  pillButtons: Array.from(document.querySelectorAll(".filter-pill")),
 };
 
 const apiToken = typeof window !== "undefined" ? window.__WAVE_API_TOKEN__ || "" : "";
 const SAVED_KEY = "wave_saved_events_v1";
-
-const VIDEO_HINTS = ["youtube.com", "youtu.be", "netflix.com", "primevideo.com", "twitch.tv", "vimeo.com"];
-const SHOPPING_HINTS = ["amazon.", "ebay.", "walmart.", "flipkart.", "aliexpress.", "etsy.", "shop", "cart"];
-const SOCIAL_HINTS = ["facebook.com", "instagram.com", "x.com", "twitter.com", "reddit.com", "linkedin.com", "threads.net"];
-const ARTICLE_HINTS = ["medium.com", "wikipedia.org", "news", "blog", "docs", "article", "substack.com"];
+const HISTORY_RENDER_LIMIT = 240;
+const COLLECTION_RULES = [
+  { key: "videos", label: "Videos", hints: ["youtube.com", "youtu.be", "netflix", "twitch", "vimeo", "primevideo"] },
+  { key: "articles", label: "Articles", hints: ["medium.com", "wikipedia.org", "substack", "blog", "article", "docs"] },
+  { key: "shopping", label: "Shopping", hints: ["amazon.", "ebay.", "walmart.", "flipkart.", "etsy.", "shop", "cart"] },
+  { key: "social", label: "Social", hints: ["instagram.com", "facebook.com", "reddit.com", "x.com", "twitter.com", "linkedin.com"] },
+  { key: "work", label: "Work / Learning", hints: ["github.com", "localhost", "vercel.com", "notion", "developer", "stack"] },
+];
 
 const state = {
-  liveSyncEnabled: false,
-  liveSyncTimer: null,
-  syncInFlight: false,
   snapshot: null,
-  searchMode: false,
-  lastQuery: "",
-  baseEvents: [],
-  similarEvents: [],
-  viewMode: "list",
-  browserFilter: "all",
-  collectionFilter: "all",
-  nav: "home",
   byBrowser: {},
-  saved: loadSavedStore(),
-  windowCaptureEvents: [],
-  currentReportDate: null,
   lastSyncInserted: 0,
   lastSyncAt: null,
+  currentReportDate: null,
+  syncInFlight: false,
+  saved: loadSavedStore(),
+  historyTab: "history",
+  historyQuery: "",
+  searchQuery: "",
+  searchPayload: null,
+  searchInFlight: false,
+  previewBlobUrl: null,
+  previewMode: "readable",
 };
 
 function showToast(message, timeout = 2200) {
+  if (!el.toast) {
+    return;
+  }
   el.toast.textContent = message;
   el.toast.classList.add("show");
   window.setTimeout(() => {
     el.toast.classList.remove("show");
   }, timeout);
+}
+
+async function copyToClipboard(text) {
+  const value = String(text || "");
+  if (!value) {
+    throw new Error("Nothing to copy.");
+  }
+
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(value);
+    return;
+  }
+
+  const input = document.createElement("textarea");
+  input.value = value;
+  input.setAttribute("readonly", "");
+  input.style.position = "fixed";
+  input.style.opacity = "0";
+  input.style.pointerEvents = "none";
+  document.body.appendChild(input);
+  input.select();
+  const ok = document.execCommand("copy");
+  input.remove();
+  if (!ok) {
+    throw new Error("Copy failed.");
+  }
+}
+
+function openSettings() {
+  if (!el.settingsModal) {
+    return;
+  }
+  closePreview();
+  closeHistory();
+  closeSearch();
+  el.settingsModal.hidden = false;
+}
+
+function closeSettings() {
+  if (!el.settingsModal) {
+    return;
+  }
+  el.settingsModal.hidden = true;
+}
+
+function openHistory() {
+  if (!el.historyModal) {
+    return;
+  }
+  closePreview();
+  closeSettings();
+  closeSearch();
+  el.historyModal.hidden = false;
+  renderHistoryPanel();
+  if (el.historySearchInput) {
+    el.historySearchInput.focus();
+  }
+}
+
+function closeHistory() {
+  if (!el.historyModal) {
+    return;
+  }
+  el.historyModal.hidden = true;
+}
+
+function openSearch() {
+  if (!el.searchModal) {
+    return;
+  }
+  closePreview();
+  closeHistory();
+  closeSettings();
+  renderSearchPanels();
+  el.searchModal.hidden = false;
+  if (el.searchInput) {
+    el.searchInput.value = state.searchQuery;
+    el.searchInput.focus();
+    el.searchInput.select();
+  }
+}
+
+function closeSearch() {
+  if (!el.searchModal) {
+    return;
+  }
+  el.searchModal.hidden = true;
+}
+
+function openPreview() {
+  if (!el.reportPreviewModal) {
+    return;
+  }
+  closeSearch();
+  closeSettings();
+  closeHistory();
+  setPreviewMode("readable");
+  el.reportPreviewModal.hidden = false;
+}
+
+function closePreview() {
+  if (!el.reportPreviewModal) {
+    return;
+  }
+  el.reportPreviewModal.hidden = true;
+  if (el.reportPreviewFrame) {
+    el.reportPreviewFrame.src = "about:blank";
+  }
+  if (state.previewBlobUrl) {
+    window.URL.revokeObjectURL(state.previewBlobUrl);
+    state.previewBlobUrl = null;
+  }
+}
+
+function setPreviewMode(mode) {
+  const resolved = mode === "pdf" ? "pdf" : "readable";
+  state.previewMode = resolved;
+
+  if (el.previewReadable) {
+    el.previewReadable.hidden = resolved !== "readable";
+  }
+  if (el.previewPdfPanel) {
+    el.previewPdfPanel.hidden = resolved !== "pdf";
+  }
+  if (el.previewReadableBtn) {
+    el.previewReadableBtn.classList.toggle("active", resolved === "readable");
+  }
+  if (el.previewPdfBtn) {
+    el.previewPdfBtn.classList.toggle("active", resolved === "pdf");
+  }
 }
 
 async function api(path, options = {}) {
@@ -130,8 +257,14 @@ async function api(path, options = {}) {
   return response.json();
 }
 
-function toDateTimeStamp(dateString) {
+function toTimeStamp(dateString) {
+  if (!dateString) {
+    return "-";
+  }
   const dt = new Date(dateString);
+  if (Number.isNaN(dt.getTime())) {
+    return "-";
+  }
   return dt.toLocaleString([], {
     month: "short",
     day: "2-digit",
@@ -141,7 +274,25 @@ function toDateTimeStamp(dateString) {
   });
 }
 
+function toClockLabel(dateString) {
+  if (!dateString) {
+    return "-";
+  }
+  const dt = new Date(dateString);
+  if (Number.isNaN(dt.getTime())) {
+    return "-";
+  }
+  return dt.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
 function toDateLabel(dateString) {
+  if (!dateString) {
+    return "-";
+  }
   const dt = new Date(dateString);
   if (Number.isNaN(dt.getTime())) {
     return "-";
@@ -153,75 +304,45 @@ function toDateLabel(dateString) {
   });
 }
 
-function formatHour(value) {
-  const hour = Number(value);
-  if (Number.isNaN(hour)) {
-    return "";
+function toHourMinute(dateString) {
+  if (!dateString) {
+    return "-";
   }
+  const dt = new Date(dateString);
+  if (Number.isNaN(dt.getTime())) {
+    return "-";
+  }
+  return dt.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
+function formatHour(hour) {
   const suffix = hour < 12 ? "AM" : "PM";
   const display = hour % 12 === 0 ? 12 : hour % 12;
   return `${display}:00 ${suffix}`;
 }
 
-function updateCaptureHint() {
-  const start = Number(el.startHour.value);
-  const end = Number(el.endHour.value);
-
-  if (Number.isNaN(start) || Number.isNaN(end) || start === end) {
-    el.captureHint.textContent = "All day (12:00 AM to 12:00 AM)";
+function setupHourSelectors() {
+  if (!el.startHour || !el.endHour) {
     return;
   }
 
-  el.captureHint.textContent = `${formatHour(start)} to ${formatHour(end)} (local)`;
-}
-
-function isInCaptureWindow(hour, startHour, endHour) {
-  if (startHour === endHour) {
-    return true;
-  }
-  if (startHour < endHour) {
-    return startHour <= hour && hour < endHour;
-  }
-  return hour >= startHour || hour < endHour;
-}
-
-function getEventHour(event) {
-  const asDate = new Date(event.visited_at);
-  if (!Number.isNaN(asDate.getTime())) {
-    return asDate.getHours();
-  }
-  const text = String(event.visited_at || "");
-  const hourToken = text.slice(11, 13);
-  const parsed = Number(hourToken);
-  if (!Number.isNaN(parsed) && parsed >= 0 && parsed <= 23) {
-    return parsed;
-  }
-  return null;
-}
-
-function filterByCaptureWindow(events, startHour, endHour) {
-  return events.filter((event) => {
-    const hour = getEventHour(event);
-    return hour !== null && isInCaptureWindow(hour, startHour, endHour);
-  });
-}
-
-function setupHourSelectors() {
   const startFrag = document.createDocumentFragment();
   const endFrag = document.createDocumentFragment();
-
   for (let hour = 0; hour < 24; hour += 1) {
     const label = formatHour(hour);
 
     const startOption = document.createElement("option");
     startOption.value = String(hour);
     startOption.textContent = label;
+    startFrag.appendChild(startOption);
 
     const endOption = document.createElement("option");
     endOption.value = String(hour);
     endOption.textContent = label;
-
-    startFrag.appendChild(startOption);
     endFrag.appendChild(endOption);
   }
 
@@ -232,11 +353,19 @@ function setupHourSelectors() {
   updateCaptureHint();
 }
 
-function getCaptureWindow() {
-  return {
-    captureStartHour: Number(el.startHour.value),
-    captureEndHour: Number(el.endHour.value),
-  };
+function updateCaptureHint() {
+  if (!el.captureHint || !el.startHour || !el.endHour) {
+    return;
+  }
+
+  const start = Number(el.startHour.value);
+  const end = Number(el.endHour.value);
+  if (start === end) {
+    el.captureHint.textContent = "All day (12:00 AM to 12:00 AM)";
+    return;
+  }
+
+  el.captureHint.textContent = `${formatHour(start)} to ${formatHour(end)} (local)`;
 }
 
 function loadSavedStore() {
@@ -253,11 +382,15 @@ function loadSavedStore() {
 }
 
 function persistSavedStore() {
-  window.localStorage.setItem(SAVED_KEY, JSON.stringify(state.saved));
+  try {
+    window.localStorage.setItem(SAVED_KEY, JSON.stringify(state.saved));
+  } catch {
+    // Ignore storage quota/runtime errors.
+  }
 }
 
 function eventKey(event) {
-  return `${event.browser}|${event.url}|${event.visited_at}`;
+  return `${event.browser || "unknown"}|${event.url || ""}|${event.visited_at || ""}`;
 }
 
 function isSaved(event) {
@@ -265,21 +398,23 @@ function isSaved(event) {
 }
 
 function saveEvent(event) {
-  const key = eventKey(event);
-  state.saved[key] = {
-    browser: event.browser,
-    title: event.title,
-    url: event.url,
-    domain: event.domain,
-    visited_at: event.visited_at,
+  state.saved[eventKey(event)] = {
+    browser: event.browser || "unknown",
+    url: event.url || "",
+    title: event.title || "Untitled",
+    domain: event.domain || "",
+    visited_at: event.visited_at || new Date().toISOString(),
   };
   persistSavedStore();
 }
 
 function unsaveEvent(event) {
-  const key = eventKey(event);
-  delete state.saved[key];
+  delete state.saved[eventKey(event)];
   persistSavedStore();
+}
+
+function savedCount() {
+  return Object.keys(state.saved).length;
 }
 
 function browserRoot(label) {
@@ -295,442 +430,770 @@ function browserLabel(label) {
   return `${root} (${profile})`;
 }
 
-function classifyCollection(event) {
-  const hay = `${event.domain} ${event.title} ${event.url}`.toLowerCase();
-
-  if (VIDEO_HINTS.some((token) => hay.includes(token))) {
-    return "videos";
-  }
-  if (SHOPPING_HINTS.some((token) => hay.includes(token))) {
-    return "shopping";
-  }
-  if (SOCIAL_HINTS.some((token) => hay.includes(token))) {
-    return "social";
-  }
-  if (ARTICLE_HINTS.some((token) => hay.includes(token))) {
-    return "articles";
-  }
-  return "all";
-}
-
-function matchesFilters(event) {
-  if (state.nav === "saved" && !isSaved(event)) {
-    return false;
-  }
-
-  if (state.browserFilter !== "all" && browserRoot(event.browser) !== state.browserFilter) {
-    return false;
-  }
-
-  if (state.collectionFilter !== "all" && classifyCollection(event) !== state.collectionFilter) {
-    return false;
-  }
-
-  return true;
-}
-
-function emptyNode(text) {
-  const node = document.createElement("p");
-  node.className = "empty";
-  node.textContent = text;
-  return node;
-}
-
-function renderTextList(target, values, emptyText) {
-  if (!target) {
-    return;
-  }
-
-  target.innerHTML = "";
-  if (!Array.isArray(values) || values.length === 0) {
-    const li = document.createElement("li");
-    li.textContent = emptyText;
-    target.appendChild(li);
-    return;
-  }
-
-  values.forEach((value) => {
-    const text = String(value || "").trim();
-    if (!text) {
-      return;
+function eventCollection(event) {
+  const hay = `${event.domain || ""} ${event.title || ""} ${event.url || ""}`.toLowerCase();
+  for (const rule of COLLECTION_RULES) {
+    if (rule.hints.some((hint) => hay.includes(hint))) {
+      return rule;
     }
-    const li = document.createElement("li");
-    li.textContent = text;
-    target.appendChild(li);
-  });
+  }
+  return { key: "general", label: "General Web" };
+}
 
-  if (!target.children.length) {
-    const li = document.createElement("li");
-    li.textContent = emptyText;
-    target.appendChild(li);
+function updateSavedCounts() {
+  const count = savedCount();
+  if (el.savedLinks) {
+    el.savedLinks.textContent = String(count);
+  }
+  if (el.savedTabCount) {
+    el.savedTabCount.textContent = String(count);
   }
 }
 
-function renderDomainList(domains) {
-  el.domainList.innerHTML = "";
-  el.domainHint.textContent = String(domains.length);
-
-  if (!domains.length) {
-    el.domainList.appendChild(emptyNode("No top domains yet."));
-    return;
+function computeCaptureRange(timeline) {
+  if (!Array.isArray(timeline) || timeline.length === 0) {
+    return "-";
   }
 
-  const fragment = document.createDocumentFragment();
-  domains.forEach((item) => {
-    const chip = document.createElement("span");
-    chip.className = "chip";
-    chip.textContent = `${item.domain} (${item.count})`;
-    fragment.appendChild(chip);
-  });
+  const sorted = timeline
+    .map((event) => new Date(event.visited_at))
+    .filter((dt) => !Number.isNaN(dt.getTime()))
+    .sort((a, b) => a.getTime() - b.getTime());
 
-  el.domainList.appendChild(fragment);
+  if (!sorted.length) {
+    return "-";
+  }
+
+  const start = sorted[0].toISOString();
+  const end = sorted[sorted.length - 1].toISOString();
+  return `${toHourMinute(start)}-${toHourMinute(end)}`;
 }
 
-function updateHealthStrip() {
-  if (!el.freshnessStatus || !el.latestEventAt || !el.lastSyncAt || !el.lastSyncInserted || !el.activeDay) {
-    return;
+function updateHealth(snapshot) {
+  const timeline = Array.isArray(snapshot?.timeline) ? snapshot.timeline : [];
+  const latest = timeline.length ? timeline[0]?.visited_at : null;
+
+  if (el.activeDay) {
+    el.activeDay.textContent = snapshot?.date ? toDateLabel(snapshot.date) : "-";
+  }
+  if (el.statusDay) {
+    el.statusDay.textContent = snapshot?.date ? toDateLabel(snapshot.date) : "-";
+  }
+  if (el.lastSyncInserted) {
+    el.lastSyncInserted.textContent = String(state.lastSyncInserted);
   }
 
-  const timeline = Array.isArray(state.snapshot?.timeline) ? state.snapshot.timeline : [];
-  const latest = timeline.length ? timeline[0].visited_at : null;
-  el.activeDay.textContent = state.snapshot?.date ? toDateLabel(state.snapshot.date) : "-";
-  el.lastSyncInserted.textContent = String(state.lastSyncInserted);
-  el.lastSyncAt.textContent = state.lastSyncAt ? toDateTimeStamp(state.lastSyncAt) : "-";
+  const syncLabel = state.lastSyncAt ? toClockLabel(state.lastSyncAt) : "-";
+  if (el.lastSyncAt) {
+    el.lastSyncAt.textContent = syncLabel;
+  }
+  if (el.statusSyncAt) {
+    el.statusSyncAt.textContent = syncLabel;
+  }
 
   if (!latest) {
-    el.latestEventAt.textContent = "Latest: -";
-    el.freshnessStatus.textContent = "No Data";
-    el.freshnessStatus.dataset.level = "none";
+    if (el.latestEventAt) {
+      el.latestEventAt.textContent = "Latest: -";
+    }
+    if (el.freshnessStatus) {
+      el.freshnessStatus.textContent = "-";
+      el.freshnessStatus.className = "health-value dash";
+    }
     return;
   }
 
   const latestDate = new Date(latest);
   if (Number.isNaN(latestDate.getTime())) {
-    el.latestEventAt.textContent = "Latest: -";
-    el.freshnessStatus.textContent = "No Data";
-    el.freshnessStatus.dataset.level = "none";
+    if (el.latestEventAt) {
+      el.latestEventAt.textContent = "Latest: -";
+    }
+    if (el.freshnessStatus) {
+      el.freshnessStatus.textContent = "-";
+      el.freshnessStatus.className = "health-value dash";
+    }
     return;
   }
+
+  if (el.latestEventAt) {
+    el.latestEventAt.textContent = `Latest: ${toTimeStamp(latest)}`;
+  }
+
   const diffMinutes = Math.max(0, Math.round((Date.now() - latestDate.getTime()) / 60000));
-  el.latestEventAt.textContent = `Latest: ${toDateTimeStamp(latest)}`;
+
+  if (!el.freshnessStatus) {
+    return;
+  }
 
   if (diffMinutes <= 5) {
-    el.freshnessStatus.textContent = `Live (${diffMinutes}m)`;
-    el.freshnessStatus.dataset.level = "live";
+    el.freshnessStatus.textContent = `Fresh (${diffMinutes}m)`;
+    el.freshnessStatus.className = "health-value fresh";
     return;
   }
+
   if (diffMinutes <= 30) {
     el.freshnessStatus.textContent = `Warm (${diffMinutes}m)`;
-    el.freshnessStatus.dataset.level = "warm";
+    el.freshnessStatus.className = "health-value fresh";
     return;
   }
+
   el.freshnessStatus.textContent = `Stale (${diffMinutes}m)`;
-  el.freshnessStatus.dataset.level = "stale";
+  el.freshnessStatus.className = "health-value stale";
 }
 
-function renderWindowCapture() {
-  if (!el.windowCaptureList || !el.windowCaptureCount) {
-    return;
+function renderSnapshot(snapshot) {
+  const total = Number(snapshot?.total_events || 0);
+  const timeline = Array.isArray(snapshot?.timeline) ? snapshot.timeline : [];
+  const roots = new Set(timeline.map((event) => browserRoot(event.browser)).filter(Boolean));
+
+  if (el.heroEvents) {
+    el.heroEvents.textContent = String(total);
+  }
+  if (el.heroSubtitle) {
+    el.heroSubtitle.textContent = `Events captured on ${toDateLabel(snapshot?.date)}`;
   }
 
-  el.windowCaptureList.innerHTML = "";
-  el.windowCaptureCount.textContent = String(state.windowCaptureEvents.length);
-
-  if (!state.windowCaptureEvents.length) {
-    el.windowCaptureList.appendChild(emptyNode("No captured entries for the selected time window."));
-    return;
+  if (el.totalEvents) {
+    el.totalEvents.textContent = String(total);
+  }
+  if (el.syncedBrowsers) {
+    el.syncedBrowsers.textContent = String(roots.size);
+  }
+  if (el.capturedEvents) {
+    el.capturedEvents.textContent = String(timeline.length);
+  }
+  if (el.captureRange) {
+    el.captureRange.textContent = computeCaptureRange(timeline);
+  }
+  if (el.savedLinks) {
+    el.savedLinks.textContent = String(savedCount());
   }
 
-  const fragment = document.createDocumentFragment();
-  state.windowCaptureEvents.forEach((event) => {
-    const item = document.createElement("article");
-    item.className = "window-capture-item";
+  updateHealth(snapshot);
+  renderHistoryPanel();
+}
 
-    const meta = document.createElement("div");
-    meta.className = "window-capture-meta";
+function historyMatchesQuery(event, query) {
+  if (!query) {
+    return true;
+  }
+  const hay = `${event.title || ""} ${event.domain || ""} ${event.url || ""} ${event.browser || ""}`.toLowerCase();
+  return hay.includes(query);
+}
 
-    const browser = document.createElement("span");
-    browser.className = "window-capture-browser";
-    browser.textContent = browserLabel(event.browser);
+function getHistoryEvents() {
+  const timeline = Array.isArray(state.snapshot?.timeline) ? state.snapshot.timeline : [];
+  return timeline.slice();
+}
 
-    const time = document.createElement("span");
-    time.className = "window-capture-time";
-    time.textContent = toDateTimeStamp(event.visited_at);
+function getSavedEvents() {
+  const entries = Object.values(state.saved || {});
+  entries.sort((a, b) => {
+    const left = new Date(a.visited_at || 0).getTime();
+    const right = new Date(b.visited_at || 0).getTime();
+    return right - left;
+  });
+  return entries;
+}
 
-    meta.append(browser, time);
+function setHistoryTab(tab) {
+  state.historyTab = tab;
+  el.historyTabs.forEach((button) => {
+    button.classList.toggle("active", button.dataset.historyTab === tab);
+  });
+  renderHistoryPanel();
+}
 
-    const title = document.createElement("p");
-    title.className = "window-capture-title";
-    title.textContent = event.title || "Untitled";
+function createHistoryItem(event, options = {}) {
+  const onItemChange = typeof options.onItemChange === "function" ? options.onItemChange : renderHistoryPanel;
+  const item = document.createElement("article");
+  item.className = "history-item";
 
-    const link = document.createElement("a");
-    link.className = "window-capture-url";
-    link.href = event.url;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = event.url;
+  const top = document.createElement("div");
+  top.className = "history-item-top";
 
-    item.append(meta, title, link);
-    fragment.appendChild(item);
+  const browser = document.createElement("span");
+  browser.className = "history-browser";
+  browser.textContent = browserLabel(event.browser);
+
+  const time = document.createElement("span");
+  time.className = "history-time";
+  time.textContent = toTimeStamp(event.visited_at);
+
+  top.append(browser, time);
+
+  const title = document.createElement("h4");
+  title.className = "history-title";
+  title.textContent = event.title || "Untitled";
+
+  const link = document.createElement("a");
+  link.className = "history-url";
+  link.href = event.url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = event.url;
+
+  const actions = document.createElement("div");
+  actions.className = "history-actions";
+
+  const openBtn = document.createElement("button");
+  openBtn.className = "history-action-btn";
+  openBtn.type = "button";
+  openBtn.textContent = "Open";
+  openBtn.addEventListener("click", () => {
+    if (!event.url) {
+      showToast("No URL available for this entry.");
+      return;
+    }
+    window.open(event.url, "_blank", "noopener,noreferrer");
   });
 
-  el.windowCaptureList.appendChild(fragment);
-}
-
-function renderSimilar(events) {
-  el.similarResults.innerHTML = "";
-  el.similarCount.textContent = String(events.length);
-
-  if (!events.length) {
-    el.similarResults.appendChild(emptyNode("Similar links will appear here after search."));
-    return;
-  }
-
-  const fragment = document.createDocumentFragment();
-  events.slice(0, 8).forEach((event) => {
-    const item = document.createElement("article");
-    item.className = "similar-item";
-
-    const link = document.createElement("a");
-    link.href = event.url;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = event.url;
-
-    item.appendChild(link);
-    fragment.appendChild(item);
-  });
-
-  el.similarResults.appendChild(fragment);
-}
-
-function renderReport(report) {
-  el.modelName.textContent = `Model: ${report.model}`;
-  state.currentReportDate = report.date || null;
-
-  const details = report.details && typeof report.details === "object" ? report.details : {};
-  const summary = String(report.summary || "No summary available.").trim();
-  const narrative = String(details.narrative || "").trim();
-  el.reportSummary.textContent = narrative.length > summary.length ? narrative : summary;
-  el.reasoningTrace.textContent = report.reasoning_trace || "No reasoning trace captured.";
-  if (el.reportDateBadge) {
-    el.reportDateBadge.textContent = `Date: ${report.date || "-"}`;
-  }
-  if (el.reportEventsBadge) {
-    el.reportEventsBadge.textContent = `Events: ${report.source_events || 0}`;
-  }
-
-  const importantHighlights = Array.isArray(details.important_highlights)
-    ? details.important_highlights
-    : [];
-  const keyFacts = Array.isArray(details.key_facts) ? details.key_facts : [];
-
-  renderTextList(
-    el.importantHighlightList,
-    importantHighlights.length ? importantHighlights : report.highlights,
-    "No priority highlights available."
-  );
-  renderTextList(
-    el.keyFactList,
-    keyFacts.length ? keyFacts : [`Captured events: ${report.source_events || 0}`],
-    "No key facts available."
-  );
-  renderTextList(el.highlightList, report.highlights, "No highlights.");
-  renderTextList(el.patternList, details.behavior_patterns, "No clear patterns detected.");
-  renderTextList(el.timeInsightList, details.time_insights, "No time insights available.");
-  renderTextList(el.categoryInsightList, details.category_insights, "No category insights available.");
-  renderTextList(el.riskList, report.risk_flags, "No critical risks detected.");
-  renderTextList(el.recommendationList, details.recommendations, "No recommendations yet.");
-  renderTextList(el.intentSignalList, details.intent_signals, "No strong intent signals available.");
-  renderTextList(el.focusGapList, details.focus_gaps, "No major focus gaps detected.");
-  renderTextList(el.actionPlanList, details.action_plan_7d, "No action plan generated.");
-  renderTextList(el.methodologyList, details.methodology_notes, "No methodology notes.");
-  if (el.deepResearchPaper) {
-    el.deepResearchPaper.textContent = String(details.deep_research_paper || "No deep research paper available.");
-  }
-}
-
-function resetReportUI() {
-  state.currentReportDate = null;
-  el.modelName.textContent = "Model: -";
-  el.reportSummary.textContent = "Click AI Report to generate today's summary.";
-  el.reasoningTrace.textContent = "No reasoning trace yet.";
-  if (el.reportDateBadge) {
-    el.reportDateBadge.textContent = "Date: -";
-  }
-  if (el.reportEventsBadge) {
-    el.reportEventsBadge.textContent = "Events: 0";
-  }
-  renderTextList(el.importantHighlightList, [], "No priority highlights available.");
-  renderTextList(el.keyFactList, [], "No key facts available.");
-  renderTextList(el.highlightList, [], "No highlights.");
-  renderTextList(el.patternList, [], "No clear patterns detected.");
-  renderTextList(el.timeInsightList, [], "No time insights available.");
-  renderTextList(el.categoryInsightList, [], "No category insights available.");
-  renderTextList(el.riskList, [], "No critical risks detected.");
-  renderTextList(el.recommendationList, [], "No recommendations yet.");
-  renderTextList(el.intentSignalList, [], "No strong intent signals available.");
-  renderTextList(el.focusGapList, [], "No major focus gaps detected.");
-  renderTextList(el.actionPlanList, [], "No action plan generated.");
-  renderTextList(el.methodologyList, [], "No methodology notes.");
-  if (el.deepResearchPaper) {
-    el.deepResearchPaper.textContent = "Generate AI report to produce a long, in-depth research paper for today.";
-  }
-}
-
-function updateBadgeCounts(allEvents) {
-  const counts = { all: allEvents.length, safari: 0, brave: 0, chrome: 0 };
-  allEvents.forEach((event) => {
-    const root = browserRoot(event.browser);
-    if (root in counts) {
-      counts[root] += 1;
+  const copyBtn = document.createElement("button");
+  copyBtn.className = "history-action-btn";
+  copyBtn.type = "button";
+  copyBtn.textContent = "Copy";
+  copyBtn.addEventListener("click", async () => {
+    try {
+      await copyToClipboard(event.url || "");
+      showToast("Link copied.");
+    } catch {
+      showToast("Could not copy link.");
     }
   });
 
-  el.browserAllCount.textContent = String(counts.all);
-  el.browserSafariCount.textContent = String(counts.safari);
-  el.browserBraveCount.textContent = String(counts.brave);
-  el.browserChromeCount.textContent = String(counts.chrome);
-}
-
-function updateSavedCounts() {
-  const count = Object.keys(state.saved).length;
-  el.savedCount.textContent = String(count);
-  el.savedStat.textContent = String(count);
-}
-
-function setActive(buttons, key, value) {
-  buttons.forEach((button) => {
-    button.classList.toggle("active", button.dataset[key] === value);
+  const saveBtn = document.createElement("button");
+  saveBtn.type = "button";
+  const refreshSaveButton = () => {
+    const saved = isSaved(event);
+    saveBtn.className = `history-action-btn ${saved ? "saved" : ""}`;
+    saveBtn.textContent = saved ? "Unsave" : "Save";
+  };
+  refreshSaveButton();
+  saveBtn.addEventListener("click", () => {
+    if (isSaved(event)) {
+      unsaveEvent(event);
+      showToast("Removed from saved.");
+    } else {
+      saveEvent(event);
+      showToast("Saved.");
+    }
+    updateSavedCounts();
+    onItemChange();
+    refreshSaveButton();
   });
+
+  actions.append(openBtn, copyBtn, saveBtn);
+  item.append(top, title, link, actions);
+  return item;
 }
 
-function applyAndRender() {
-  const filtered = state.baseEvents.filter(matchesFilters);
+function createEmptyNode(message) {
+  const empty = document.createElement("p");
+  empty.className = "history-empty";
+  empty.textContent = message;
+  return empty;
+}
 
-  el.historyList.classList.remove("list", "grid", "compact");
-  el.historyList.classList.add(state.viewMode);
-  el.historyList.innerHTML = "";
+function renderHistoryList(events, options = {}) {
+  const list = document.createElement("div");
+  list.className = "history-list";
+  events.forEach((event) => {
+    list.appendChild(createHistoryItem(event, options));
+  });
+  return list;
+}
 
-  if (!filtered.length) {
-    const message = state.nav === "saved" ? "No saved links yet." : "No history events for this filter.";
-    el.historyList.appendChild(emptyNode(message));
-  } else {
-    const fragment = document.createDocumentFragment();
+function renderCollections(events) {
+  const byCollection = new Map();
+  events.forEach((event) => {
+    const collection = eventCollection(event);
+    const key = collection.key;
+    if (!byCollection.has(key)) {
+      byCollection.set(key, { label: collection.label, events: [] });
+    }
+    byCollection.get(key).events.push(event);
+  });
 
-    filtered.forEach((event) => {
-      const item = document.createElement("article");
-      item.className = "history-item";
-
-      const header = document.createElement("div");
-      header.className = "item-header";
-
-      const browser = document.createElement("span");
-      const root = browserRoot(event.browser);
-      browser.className = `browser-tag ${root}`;
-      browser.textContent = browserLabel(event.browser);
-
-      const time = document.createElement("span");
-      time.className = "timestamp";
-      time.textContent = toDateTimeStamp(event.visited_at);
-
-      header.append(browser, time);
-
-      const title = document.createElement("h3");
-      title.className = "item-title";
-      title.textContent = event.title || "Untitled";
-
-      const url = document.createElement("a");
-      url.className = "item-url";
-      url.href = event.url;
-      url.target = "_blank";
-      url.rel = "noopener noreferrer";
-      url.textContent = event.url;
-
-      const actions = document.createElement("div");
-      actions.className = "item-actions";
-
-      const openBtn = document.createElement("button");
-      openBtn.className = "action-btn";
-      openBtn.type = "button";
-      openBtn.innerHTML = "<span class=\"btn-icon\">↗</span><span>Open</span>";
-      openBtn.addEventListener("click", () => {
-        window.open(event.url, "_blank", "noopener,noreferrer");
-      });
-
-      const copyBtn = document.createElement("button");
-      copyBtn.className = "action-btn";
-      copyBtn.type = "button";
-      copyBtn.innerHTML = "<span class=\"btn-icon\">⧉</span><span>Copy</span>";
-      copyBtn.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(event.url);
-          showToast("Link copied.");
-        } catch {
-          showToast("Could not copy link.");
-        }
-      });
-
-      const saveBtn = document.createElement("button");
-      saveBtn.className = `action-btn ${isSaved(event) ? "saved" : ""}`;
-      saveBtn.type = "button";
-      saveBtn.innerHTML = `<span class="btn-icon">★</span><span>${isSaved(event) ? "Saved" : "Save"}</span>`;
-      saveBtn.addEventListener("click", () => {
-        if (isSaved(event)) {
-          unsaveEvent(event);
-          showToast("Removed from saved.");
-        } else {
-          saveEvent(event);
-          showToast("Saved.");
-        }
-        updateSavedCounts();
-        applyAndRender();
-      });
-
-      actions.append(openBtn, copyBtn, saveBtn);
-      item.append(header, title, url, actions);
-      fragment.appendChild(item);
-    });
-
-    el.historyList.appendChild(fragment);
+  const container = document.createElement("div");
+  if (!byCollection.size) {
+    container.appendChild(createEmptyNode("No collection matches for the selected filter."));
+    return container;
   }
 
-  const label = state.searchMode ? `Search Results for "${state.lastQuery}"` : state.nav === "saved" ? "Saved Links" : "History Feed";
-  el.resultsTitle.textContent = label;
-  el.resultCount.textContent = `${filtered.length} result${filtered.length === 1 ? "" : "s"}`;
-  el.homeCount.textContent = String(state.baseEvents.length);
-  updateBadgeCounts(state.baseEvents);
+  Array.from(byCollection.values())
+    .sort((a, b) => b.events.length - a.events.length)
+    .forEach((group) => {
+      const block = document.createElement("section");
+      block.className = "collection-group";
+
+      const heading = document.createElement("h4");
+      heading.className = "collection-title";
+      heading.textContent = `${group.label} (${group.events.length})`;
+
+      block.appendChild(heading);
+      block.appendChild(renderHistoryList(group.events));
+      container.appendChild(block);
+    });
+
+  return container;
+}
+
+function renderHistoryPanel() {
+  if (!el.historyPanel) {
+    return;
+  }
+
+  const query = state.historyQuery.trim().toLowerCase();
+  const allEvents = getHistoryEvents();
+  const filteredAll = allEvents.filter((event) => historyMatchesQuery(event, query));
+  const savedEvents = getSavedEvents().filter((event) => historyMatchesQuery(event, query));
+  const limitedHistory = filteredAll.slice(0, HISTORY_RENDER_LIMIT);
+  const limitedSaved = savedEvents.slice(0, HISTORY_RENDER_LIMIT);
+
+  const collectionMap = new Map();
+  filteredAll.forEach((event) => {
+    const collection = eventCollection(event);
+    collectionMap.set(collection.key, true);
+  });
+
+  if (el.historyTabCount) {
+    el.historyTabCount.textContent = String(allEvents.length);
+  }
+  if (el.collectionsTabCount) {
+    el.collectionsTabCount.textContent = String(collectionMap.size);
+  }
   updateSavedCounts();
-  renderSimilar(state.similarEvents.filter(matchesFilters));
+
+  el.historyPanel.innerHTML = "";
+
+  if (state.historyTab === "history") {
+    const trimmed = filteredAll.length > HISTORY_RENDER_LIMIT;
+    if (el.historyMeta) {
+      el.historyMeta.textContent = trimmed
+        ? `Showing ${limitedHistory.length} of ${filteredAll.length} history items. Refine search for full precision.`
+        : `Showing ${filteredAll.length} history item${filteredAll.length === 1 ? "" : "s"}.`;
+    }
+    if (!filteredAll.length) {
+      el.historyPanel.appendChild(createEmptyNode("No history items found."));
+      return;
+    }
+    el.historyPanel.appendChild(renderHistoryList(limitedHistory));
+    return;
+  }
+
+  if (state.historyTab === "collections") {
+    if (el.historyMeta) {
+      el.historyMeta.textContent = `Showing ${collectionMap.size} collection${collectionMap.size === 1 ? "" : "s"}.`;
+    }
+    el.historyPanel.appendChild(renderCollections(limitedHistory));
+    return;
+  }
+
+  const trimmed = savedEvents.length > HISTORY_RENDER_LIMIT;
+  if (el.historyMeta) {
+    el.historyMeta.textContent = trimmed
+      ? `Showing ${limitedSaved.length} of ${savedEvents.length} saved items. Refine search for full precision.`
+      : `Showing ${savedEvents.length} saved item${savedEvents.length === 1 ? "" : "s"}.`;
+  }
+  if (!savedEvents.length) {
+    el.historyPanel.appendChild(createEmptyNode("No saved links yet."));
+    return;
+  }
+  el.historyPanel.appendChild(renderHistoryList(limitedSaved));
+}
+
+function renderSearchEmptyState() {
+  if (el.searchMeta) {
+    el.searchMeta.textContent = "Analysis uses only Wave-captured history.";
+  }
+  if (el.searchInsight) {
+    el.searchInsight.innerHTML = "";
+    el.searchInsight.appendChild(paragraph("Run a search to see analyzed insights from your browsing history data."));
+  }
+  if (el.searchResultsPanel) {
+    el.searchResultsPanel.innerHTML = "";
+    el.searchResultsPanel.appendChild(createEmptyNode("No search results yet."));
+  }
+  if (el.searchSimilarPanel) {
+    el.searchSimilarPanel.innerHTML = "";
+    el.searchSimilarPanel.appendChild(createEmptyNode("Similar links will appear after search."));
+  }
+}
+
+function describeSearchAnalysis(payload) {
+  const results = Array.isArray(payload?.results) ? payload.results : [];
+  const similar = Array.isArray(payload?.similar) ? payload.similar : [];
+  const totalMatches = Number(payload?.total_matches || results.length);
+  const query = String(payload?.query || "").trim();
+  const combined = [...results, ...similar];
+
+  if (!query) {
+    return {
+      summary: "Enter a keyword to analyze your captured browsing history.",
+      bullets: [],
+    };
+  }
+
+  if (!totalMatches) {
+    return {
+      summary: `No history match was found for "${query}" in Wave data yet.`,
+      bullets: [
+        "Try another keyword or sync recent browser activity first.",
+        "Analysis is generated only from your captured Wave history data.",
+      ],
+    };
+  }
+
+  const domainCount = new Map();
+  const browserCount = new Map();
+  let titleHits = 0;
+  let urlHits = 0;
+  const queryLower = query.toLowerCase();
+
+  results.forEach((event) => {
+    const domain = String(event.domain || "unknown");
+    domainCount.set(domain, (domainCount.get(domain) || 0) + 1);
+
+    const browser = browserRoot(event.browser) || "unknown";
+    browserCount.set(browser, (browserCount.get(browser) || 0) + 1);
+
+    const title = String(event.title || "").toLowerCase();
+    const url = String(event.url || "").toLowerCase();
+    if (title.includes(queryLower)) {
+      titleHits += 1;
+    }
+    if (url.includes(queryLower) || domain.toLowerCase().includes(queryLower)) {
+      urlHits += 1;
+    }
+  });
+
+  const topDomains = Array.from(domainCount.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4)
+    .map(([domain, count]) => `${domain} (${count})`);
+
+  const browserMix = Array.from(browserCount.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([browser, count]) => `${browser} (${count})`);
+
+  const revisitDomains = Array.from(domainCount.values()).filter((count) => count >= 2).length;
+
+  const times = combined
+    .map((event) => new Date(event.visited_at))
+    .filter((dt) => !Number.isNaN(dt.getTime()))
+    .sort((a, b) => a.getTime() - b.getTime());
+
+  const rangeLine =
+    times.length > 1
+      ? `Activity window: ${toTimeStamp(times[0].toISOString())} to ${toTimeStamp(times[times.length - 1].toISOString())}.`
+      : times.length === 1
+        ? `Matched activity time: ${toTimeStamp(times[0].toISOString())}.`
+        : "Activity window: unavailable.";
+
+  const summary = `"${query}" matched ${totalMatches} history event${totalMatches === 1 ? "" : "s"} in Wave.`;
+  const bullets = [
+    `Direct results shown: ${results.length}. Similar links from same domains: ${similar.length}.`,
+    `Top domains for this term: ${topDomains.length ? topDomains.join(", ") : "none"}.`,
+    `Browser mix: ${browserMix.length ? browserMix.join(", ") : "none"}.`,
+    `Keyword hit quality: ${titleHits} title hit${titleHits === 1 ? "" : "s"}, ${urlHits} URL/domain hit${urlHits === 1 ? "" : "s"}.`,
+    `Repeat-interest signal: ${revisitDomains} domain${revisitDomains === 1 ? "" : "s"} revisited multiple times.`,
+    rangeLine,
+    "This analysis is generated only from Wave-captured history data.",
+  ];
+
+  return { summary, bullets };
+}
+
+function renderSearchPanels() {
+  const payload = state.searchPayload;
+  if (!payload) {
+    renderSearchEmptyState();
+    return;
+  }
+
+  const results = Array.isArray(payload.results) ? payload.results : [];
+  const similar = Array.isArray(payload.similar) ? payload.similar : [];
+  const totalMatches = Number(payload.total_matches || results.length);
+  const query = String(payload.query || state.searchQuery || "").trim();
+
+  if (el.searchMeta) {
+    el.searchMeta.textContent = `${totalMatches} total match${totalMatches === 1 ? "" : "es"} for "${query}". Showing ${
+      results.length
+    } direct result${results.length === 1 ? "" : "s"} and ${similar.length} similar link${similar.length === 1 ? "" : "s"}.`;
+  }
+
+  if (el.searchResultsPanel) {
+    el.searchResultsPanel.innerHTML = "";
+    if (!results.length) {
+      el.searchResultsPanel.appendChild(createEmptyNode("No direct history matches for this term."));
+    } else {
+      el.searchResultsPanel.appendChild(renderHistoryList(results, { onItemChange: renderSearchPanels }));
+    }
+  }
+
+  if (el.searchSimilarPanel) {
+    el.searchSimilarPanel.innerHTML = "";
+    if (!similar.length) {
+      el.searchSimilarPanel.appendChild(createEmptyNode("No similar links found from matching domains."));
+    } else {
+      el.searchSimilarPanel.appendChild(renderHistoryList(similar, { onItemChange: renderSearchPanels }));
+    }
+  }
+
+  if (el.searchInsight) {
+    const analysis = describeSearchAnalysis(payload);
+    el.searchInsight.innerHTML = "";
+    el.searchInsight.appendChild(paragraph(analysis.summary));
+    if (analysis.bullets.length) {
+      const list = document.createElement("ul");
+      analysis.bullets.forEach((bullet) => {
+        const li = document.createElement("li");
+        li.textContent = bullet;
+        list.appendChild(li);
+      });
+      el.searchInsight.appendChild(list);
+    }
+  }
+}
+
+async function runHistorySearch(rawQuery) {
+  const query = String(rawQuery || "").trim();
+  if (!query) {
+    showToast("Enter a search term first.");
+    return;
+  }
+  if (state.searchInFlight) {
+    return;
+  }
+
+  state.searchInFlight = true;
+  if (el.searchRunBtn) {
+    el.searchRunBtn.disabled = true;
+  }
+  if (el.lastAction) {
+    el.lastAction.textContent = `Searching "${query}"...`;
+  }
+
+  try {
+    const params = new URLSearchParams({
+      q: query,
+      limit: "80",
+    });
+    const payload = await api(`/api/search?${params.toString()}`);
+
+    state.searchQuery = query;
+    state.searchPayload = payload;
+    renderSearchPanels();
+
+    if (el.lastAction) {
+      el.lastAction.textContent = `Search ready (${payload.total_matches} matches)`;
+    }
+    showToast(`Search complete: ${payload.total_matches} matches.`);
+  } catch (error) {
+    if (el.lastAction) {
+      el.lastAction.textContent = "Search failed";
+    }
+    showToast(error.message || "Could not search history.");
+  } finally {
+    state.searchInFlight = false;
+    if (el.searchRunBtn) {
+      el.searchRunBtn.disabled = false;
+    }
+  }
+}
+
+function paragraph(text) {
+  const p = document.createElement("p");
+  p.textContent = text;
+  return p;
+}
+
+function makeBulletSentence(label, values, fallback = "No clear signals.", maxItems = 5) {
+  if (!Array.isArray(values) || !values.length) {
+    return `${label}: ${fallback}`;
+  }
+  return `${label}: ${values.slice(0, maxItems).join(", ")}.`;
+}
+
+function renderReport(report) {
+  const details = report?.details && typeof report.details === "object" ? report.details : {};
+  const narrative = String(details.narrative || "").trim();
+  const summary = String(report?.summary || "No summary available.").trim();
+  const examinationSummary = String(details.examination_summary || "").trim();
+  const examinationGrade = String(details.examination_grade || "").trim();
+  const parsedScore = Number(details.overall_score);
+  const overallScore = Number.isFinite(parsedScore) ? Math.max(0, Math.min(100, Math.round(parsedScore))) : null;
+  const scorecard = Array.isArray(details.scorecard) ? details.scorecard : [];
+  const detailedFindings = Array.isArray(details.detailed_findings) ? details.detailed_findings : [];
+  const topDomains = Array.isArray(state.snapshot?.top_domains) ? state.snapshot.top_domains : [];
+
+  const topDomainLine = topDomains.length
+    ? `Top domains today: ${topDomains.slice(0, 6).map((item) => `${item.domain} (${item.count})`).join(", ")}.`
+    : "Top domains today: No significant domain concentration yet.";
+  const examLine =
+    examinationGrade || overallScore !== null
+      ? `Examination Result: Grade ${examinationGrade || "-"} | Overall Score ${overallScore ?? "-"}/100.`
+      : "";
+
+  const paragraphs = [
+    examLine,
+    examinationSummary || summary,
+    narrative && narrative !== examinationSummary ? narrative : "",
+    makeBulletSentence("Scorecard", scorecard, "No scorecard generated.", 6),
+    makeBulletSentence("Detailed findings", detailedFindings, "No detailed findings generated.", 8),
+    topDomainLine,
+    makeBulletSentence("Behavior patterns", details.behavior_patterns),
+    makeBulletSentence("Time insights", details.time_insights),
+    makeBulletSentence("Category insights", details.category_insights),
+    makeBulletSentence("Intent signals", details.intent_signals),
+    makeBulletSentence("Focus gaps", details.focus_gaps),
+    makeBulletSentence("Risk flags", report?.risk_flags, "No critical risks detected."),
+    makeBulletSentence("Recommendations", details.recommendations),
+  ].filter(Boolean);
+
+  if (el.reportBody) {
+    el.reportBody.innerHTML = "";
+    const fragment = document.createDocumentFragment();
+    paragraphs.forEach((line) => {
+      fragment.appendChild(paragraph(line));
+    });
+    el.reportBody.appendChild(fragment);
+  }
+
+  if (el.reportMetaEvents) {
+    el.reportMetaEvents.textContent = String(report?.source_events || 0);
+  }
+  if (el.reportMetaDate) {
+    el.reportMetaDate.textContent = toDateLabel(report?.date);
+  }
+  if (el.reportMetaModel) {
+    el.reportMetaModel.textContent = String(report?.model || "-");
+  }
+
+  state.currentReportDate = report?.date || null;
+}
+
+function renderPreviewReadable(report) {
+  if (!el.previewReadable) {
+    return;
+  }
+
+  const details = report?.details && typeof report.details === "object" ? report.details : {};
+  const parsedScore = Number(details.overall_score);
+  const overallScore = Number.isFinite(parsedScore) ? Math.max(0, Math.min(100, Math.round(parsedScore))) : null;
+  const examinationGrade = String(details.examination_grade || "-").trim();
+  const sourceEvents = Number(report?.source_events || state.snapshot?.total_events || 0);
+  const summary = String(details.examination_summary || report?.summary || "No summary available.").trim();
+
+  const statItems = [
+    { label: "Grade", value: examinationGrade || "-" },
+    { label: "Score", value: overallScore === null ? "-" : `${overallScore}/100` },
+    { label: "Events", value: String(sourceEvents) },
+    { label: "Date", value: toDateLabel(report?.date || state.snapshot?.date) },
+  ];
+
+  const listOrFallback = (value, fallback, maxItems = 6) => {
+    if (!Array.isArray(value) || !value.length) {
+      return [fallback];
+    }
+    return value.slice(0, maxItems).map((item) => String(item || "").trim()).filter(Boolean);
+  };
+
+  const sections = [
+    { title: "Summary", type: "paragraph", content: summary, wide: true },
+    {
+      title: "Highlights",
+      type: "list",
+      content: listOrFallback(details.detailed_findings, "No highlights generated.", 6),
+    },
+    {
+      title: "Behavior Patterns",
+      type: "list",
+      content: listOrFallback(details.behavior_patterns, "No behavior pattern insights generated.", 5),
+    },
+    {
+      title: "Focus Gaps",
+      type: "list",
+      content: listOrFallback(details.focus_gaps, "No major focus gaps detected.", 5),
+    },
+    {
+      title: "Risk Flags",
+      type: "list",
+      content: listOrFallback(report?.risk_flags, "No critical risk flags detected.", 5),
+    },
+    {
+      title: "Recommendations",
+      type: "list",
+      content: listOrFallback(details.recommendations, "No recommendations generated.", 6),
+      wide: true,
+    },
+  ];
+
+  el.previewReadable.innerHTML = "";
+
+  const top = document.createElement("section");
+  top.className = "readable-top";
+  statItems.forEach((item) => {
+    const card = document.createElement("article");
+    card.className = "readable-stat";
+
+    const label = document.createElement("p");
+    label.className = "readable-stat-label";
+    label.textContent = item.label;
+
+    const value = document.createElement("p");
+    value.className = "readable-stat-value";
+    value.textContent = item.value;
+
+    card.append(label, value);
+    top.appendChild(card);
+  });
+
+  const grid = document.createElement("section");
+  grid.className = "readable-grid";
+  sections.forEach((section) => {
+    const block = document.createElement("article");
+    block.className = `readable-section${section.wide ? " wide" : ""}`;
+
+    const title = document.createElement("h4");
+    title.textContent = section.title;
+    block.appendChild(title);
+
+    if (section.type === "paragraph") {
+      const text = document.createElement("p");
+      text.textContent = String(section.content || "No data available.");
+      block.appendChild(text);
+    } else {
+      const list = document.createElement("ul");
+      section.content.forEach((line) => {
+        const li = document.createElement("li");
+        li.textContent = line;
+        list.appendChild(li);
+      });
+      block.appendChild(list);
+    }
+
+    grid.appendChild(block);
+  });
+
+  el.previewReadable.append(top, grid);
 }
 
 async function loadSnapshot() {
   const snapshot = await api("/api/today");
   state.snapshot = snapshot;
-
-  el.totalEvents.textContent = String(snapshot.total_events);
-  renderDomainList(snapshot.top_domains);
-  updateHealthStrip();
-
-  if (!state.searchMode) {
-    state.baseEvents = snapshot.timeline;
-    state.similarEvents = [];
-  }
-
-  applyAndRender();
+  renderSnapshot(snapshot);
 }
 
 async function checkPermissions(silent = false) {
   try {
     const status = await api("/api/permissions");
     const safari = status.browsers.find((item) => item.browser === "safari");
-
-    if (safari) {
+    if (safari && el.permissionText) {
       el.permissionText.textContent = `Safari: ${safari.status} | ${safari.message}`;
     }
 
     const ready = status.browsers.filter((item) => item.status === "ready").length;
-    if (!state.syncInFlight) {
+    if (el.syncedBrowsers && !state.syncInFlight) {
       el.syncedBrowsers.textContent = String(ready);
     }
 
@@ -748,30 +1211,35 @@ async function runSync({
   silent = false,
   lookbackHours = 24,
   includeAllHistory = false,
-  browsers = ["chrome", "brave", "safari"],
-  label = "Syncing...",
   captureStartHour = null,
   captureEndHour = null,
+  label = "Syncing...",
 } = {}) {
   if (state.syncInFlight) {
     return false;
   }
 
   state.syncInFlight = true;
-  el.syncBtn.disabled = true;
-  if (el.powerBtn) {
-    el.powerBtn.disabled = true;
+  if (el.syncBtn) {
+    el.syncBtn.disabled = true;
   }
-  el.safariFullBtn.disabled = true;
   if (el.captureWindowBtn) {
     el.captureWindowBtn.disabled = true;
   }
   if (el.deleteWindowBtn) {
     el.deleteWindowBtn.disabled = true;
   }
-  el.lastAction.textContent = label;
+  if (el.lastAction) {
+    el.lastAction.textContent = label;
+  }
 
   try {
+    const body = {
+      lookback_hours: lookbackHours,
+      include_all_history: includeAllHistory,
+      browsers: ["chrome", "brave", "safari"],
+    };
+
     const hasWindow =
       Number.isInteger(captureStartHour) &&
       Number.isInteger(captureEndHour) &&
@@ -780,11 +1248,6 @@ async function runSync({
       captureEndHour >= 0 &&
       captureEndHour <= 23;
 
-    const body = {
-      lookback_hours: lookbackHours,
-      include_all_history: includeAllHistory,
-      browsers,
-    };
     if (hasWindow) {
       body.capture_start_hour = captureStartHour;
       body.capture_end_hour = captureEndHour;
@@ -795,42 +1258,32 @@ async function runSync({
       body: JSON.stringify(body),
     });
 
-    state.byBrowser = result.by_browser;
+    state.byBrowser = result.by_browser || {};
     state.lastSyncInserted = Number(result.inserted || 0);
     state.lastSyncAt = new Date().toISOString();
 
-    const syncedRoots = new Set(
-      Object.entries(result.by_browser)
-        .filter(([, count]) => count > 0)
-        .map(([name]) => browserRoot(name))
-    );
-
-    el.syncedBrowsers.textContent = String(syncedRoots.size);
-    el.lastAction.textContent = `Synced ${result.inserted} new events`;
-
-    if (!silent) {
-      if (Object.keys(result.errors).length) {
-        showToast("Sync finished with warnings.");
-      } else {
-        showToast(`Sync complete: ${result.inserted} new events.`);
-      }
-    }
-
     await loadSnapshot();
     await checkPermissions(true);
-    updateHealthStrip();
+
+    if (el.lastAction) {
+      el.lastAction.textContent = `Synced ${state.lastSyncInserted} new events`;
+    }
+
+    if (!silent) {
+      showToast(`Sync complete: ${state.lastSyncInserted} new event${state.lastSyncInserted === 1 ? "" : "s"}.`);
+    }
     return true;
   } catch (error) {
-    el.lastAction.textContent = "Sync failed";
+    if (el.lastAction) {
+      el.lastAction.textContent = "Sync failed";
+    }
     showToast(error.message || "Sync failed.");
     return false;
   } finally {
     state.syncInFlight = false;
-    el.syncBtn.disabled = false;
-    if (el.powerBtn) {
-      el.powerBtn.disabled = false;
+    if (el.syncBtn) {
+      el.syncBtn.disabled = false;
     }
-    el.safariFullBtn.disabled = false;
     if (el.captureWindowBtn) {
       el.captureWindowBtn.disabled = false;
     }
@@ -840,195 +1293,67 @@ async function runSync({
   }
 }
 
-function setLiveSync(enabled) {
-  state.liveSyncEnabled = enabled;
-  el.liveBtn.innerHTML = `<span class="btn-icon">◉</span>Live: ${enabled ? "On" : "Off"}`;
-
-  if (state.liveSyncTimer) {
-    window.clearInterval(state.liveSyncTimer);
-    state.liveSyncTimer = null;
-  }
-
-  if (enabled) {
-    state.liveSyncTimer = window.setInterval(() => {
-      runSync({
-        silent: true,
-        lookbackHours: 1,
-        includeAllHistory: false,
-        browsers: ["chrome", "brave", "safari"],
-        label: "Live syncing...",
-      });
-    }, 15000);
-  }
-}
-
-function clearSearchInputs() {
-  el.searchInputPanel.value = "";
-}
-
-async function runSearch() {
-  const query = el.searchInputPanel.value.trim();
-
-  if (query.length < 2) {
-    state.searchMode = false;
-    state.lastQuery = "";
-    state.baseEvents = state.snapshot ? state.snapshot.timeline : [];
-    state.similarEvents = [];
-    el.searchMeta.textContent = "Showing today's timeline.";
-    applyAndRender();
-    return;
-  }
-
-  el.searchBtn.disabled = true;
-  state.searchMode = true;
-  state.lastQuery = query;
-  el.lastAction.textContent = "Searching...";
-
-  try {
-    await runSync({
-      silent: true,
-      lookbackHours: 1,
-      includeAllHistory: false,
-      browsers: ["chrome", "brave", "safari"],
-      label: "Syncing before search...",
-    });
-
-    const payload = await api(`/api/search?q=${encodeURIComponent(query)}&limit=60`);
-    state.baseEvents = payload.results;
-    state.similarEvents = payload.similar;
-    el.searchMeta.textContent = `Found ${payload.total_matches} match${payload.total_matches === 1 ? "" : "es"} for "${payload.query}".`;
-    el.lastAction.textContent = "Search complete";
-    applyAndRender();
-  } catch (error) {
-    el.lastAction.textContent = "Search failed";
-    showToast(error.message || "Search failed.");
-  } finally {
-    el.searchBtn.disabled = false;
-  }
-}
-
-async function clearWaveData() {
-  const confirmed = window.confirm("Delete all Wave app history and cached reports? This cannot be undone.");
-  if (!confirmed) {
-    return;
-  }
-
-  el.clearHistoryBtn.disabled = true;
-  el.lastAction.textContent = "Deleting Wave data...";
-
-  try {
-    const payload = await api("/api/history/clear", {
-      method: "POST",
-      body: JSON.stringify({ include_reports: true }),
-    });
-
-    state.snapshot = null;
-    state.searchMode = false;
-    state.lastQuery = "";
-    state.baseEvents = [];
-    state.similarEvents = [];
-    state.windowCaptureEvents = [];
-    state.lastSyncInserted = 0;
-    state.lastSyncAt = null;
-    clearSearchInputs();
-
-    el.totalEvents.textContent = "0";
-    el.syncedBrowsers.textContent = "0";
-    el.searchMeta.textContent = "History cleared.";
-    el.lastAction.textContent = "Wave data deleted";
-    renderDomainList([]);
-    renderWindowCapture();
-    resetReportUI();
-    updateHealthStrip();
-    applyAndRender();
-
-    showToast(`Deleted ${payload.deleted_events} events and ${payload.deleted_reports} reports.`);
-  } catch (error) {
-    el.lastAction.textContent = "Delete failed";
-    showToast(error.message || "Could not delete data.");
-  } finally {
-    el.clearHistoryBtn.disabled = false;
-  }
-}
-
 async function captureSelectedWindow() {
-  if (state.syncInFlight) {
-    showToast("Sync already running.");
+  const start = Number(el.startHour?.value);
+  const end = Number(el.endHour?.value);
+
+  const synced = await runSync({
+    silent: true,
+    lookbackHours: 24,
+    includeAllHistory: false,
+    captureStartHour: start,
+    captureEndHour: end,
+    label: "Capturing selected window...",
+  });
+
+  if (!synced) {
     return;
   }
 
-  const { captureStartHour, captureEndHour } = getCaptureWindow();
-  el.lastAction.textContent = "Capturing selected window...";
-
-  try {
-    const synced = await runSync({
-      silent: true,
-      lookbackHours: 24,
-      includeAllHistory: false,
-      browsers: ["chrome", "brave", "safari"],
-      label: "Capturing selected window...",
-    });
-    if (!synced) {
-      el.lastAction.textContent = "Capture failed";
-      return;
-    }
-
-    const timeline = Array.isArray(state.snapshot?.timeline) ? state.snapshot.timeline : [];
-    state.windowCaptureEvents = filterByCaptureWindow(timeline, captureStartHour, captureEndHour);
-    renderWindowCapture();
-    el.lastAction.textContent = "Capture window ready";
-    showToast(`Captured ${state.windowCaptureEvents.length} event${state.windowCaptureEvents.length === 1 ? "" : "s"} in selected window.`);
-  } catch (error) {
-    el.lastAction.textContent = "Capture failed";
-    showToast(error.message || "Could not capture selected window.");
+  if (el.lastAction) {
+    el.lastAction.textContent = "Capture window synced";
   }
+  showToast("Capture window imported.");
 }
 
 async function deleteSelectedWindowData() {
-  if (state.syncInFlight) {
-    showToast("Sync already running.");
-    return;
-  }
+  const start = Number(el.startHour?.value);
+  const end = Number(el.endHour?.value);
+  const rangeLabel = `${formatHour(start)} to ${formatHour(end)}`;
+  const day = state.snapshot?.date || "today";
 
-  const { captureStartHour, captureEndHour } = getCaptureWindow();
-  const rangeLabel = `${formatHour(captureStartHour)} to ${formatHour(captureEndHour)}`;
-  const confirmed = window.confirm(
-    `Delete Wave history between ${rangeLabel} for ${state.snapshot?.date || "today"}?`
-  );
-  if (!confirmed) {
+  const ok = window.confirm(`Delete Wave history between ${rangeLabel} for ${day}?`);
+  if (!ok) {
     return;
   }
 
   if (el.deleteWindowBtn) {
     el.deleteWindowBtn.disabled = true;
   }
-  el.lastAction.textContent = "Deleting selected window...";
+
+  if (el.lastAction) {
+    el.lastAction.textContent = "Deleting selected window...";
+  }
 
   try {
     const payload = await api("/api/history/window/delete", {
       method: "POST",
       body: JSON.stringify({
         date: state.snapshot?.date || null,
-        capture_start_hour: captureStartHour,
-        capture_end_hour: captureEndHour,
+        capture_start_hour: start,
+        capture_end_hour: end,
       }),
     });
 
-    state.searchMode = false;
-    state.lastQuery = "";
-    clearSearchInputs();
     await loadSnapshot();
-
-    const timeline = Array.isArray(state.snapshot?.timeline) ? state.snapshot.timeline : [];
-    state.windowCaptureEvents = filterByCaptureWindow(timeline, captureStartHour, captureEndHour);
-    renderWindowCapture();
-    el.searchMeta.textContent = "Showing today's timeline.";
-    el.lastAction.textContent = "Selected window deleted";
-    showToast(
-      `Deleted ${payload.deleted_events} event${payload.deleted_events === 1 ? "" : "s"} from selected window.`
-    );
+    if (el.lastAction) {
+      el.lastAction.textContent = "Selected window deleted";
+    }
+    showToast(`Deleted ${payload.deleted_events} event${payload.deleted_events === 1 ? "" : "s"}.`);
   } catch (error) {
-    el.lastAction.textContent = "Window delete failed";
+    if (el.lastAction) {
+      el.lastAction.textContent = "Window delete failed";
+    }
     showToast(error.message || "Could not delete selected window.");
   } finally {
     if (el.deleteWindowBtn) {
@@ -1037,26 +1362,93 @@ async function deleteSelectedWindowData() {
   }
 }
 
-async function generateReport(forceRefresh = false, options = {}) {
-  const { syncFirst = true } = options;
-  el.reportBtn.disabled = true;
+async function clearWaveData() {
+  const ok = window.confirm("Delete all Wave app history and cached reports? This cannot be undone.");
+  if (!ok) {
+    return;
+  }
+
+  if (el.clearHistoryBtn) {
+    el.clearHistoryBtn.disabled = true;
+  }
+  if (el.lastAction) {
+    el.lastAction.textContent = "Deleting Wave data...";
+  }
+
+  try {
+    const payload = await api("/api/history/clear", {
+      method: "POST",
+      body: JSON.stringify({ include_reports: true }),
+    });
+
+    state.snapshot = null;
+    state.lastSyncInserted = 0;
+    state.lastSyncAt = null;
+    state.saved = {};
+    state.searchQuery = "";
+    state.searchPayload = null;
+    persistSavedStore();
+    renderSnapshot({ date: null, total_events: 0, timeline: [] });
+    resetReport();
+    renderSearchPanels();
+    if (el.searchInput) {
+      el.searchInput.value = "";
+    }
+    closePreview();
+    renderHistoryPanel();
+
+    if (el.lastAction) {
+      el.lastAction.textContent = "Wave data deleted";
+    }
+
+    showToast(`Deleted ${payload.deleted_events} events and ${payload.deleted_reports} reports.`);
+  } catch (error) {
+    if (el.lastAction) {
+      el.lastAction.textContent = "Delete failed";
+    }
+    showToast(error.message || "Could not delete data.");
+  } finally {
+    if (el.clearHistoryBtn) {
+      el.clearHistoryBtn.disabled = false;
+    }
+  }
+}
+
+function resetReport() {
+  state.currentReportDate = null;
+  if (el.reportBody) {
+    el.reportBody.innerHTML =
+      "<p>Wave captures your browser events and builds a detailed examination-result report from today's activity. Click <strong>Refresh Analysis</strong> to generate the latest deep analysis.</p>";
+  }
+  if (el.reportMetaEvents) {
+    el.reportMetaEvents.textContent = "0";
+  }
+  if (el.reportMetaDate) {
+    el.reportMetaDate.textContent = "-";
+  }
+  if (el.reportMetaModel) {
+    el.reportMetaModel.textContent = "-";
+  }
+}
+
+async function generateReport(forceRefresh = true) {
   if (el.reportRefreshBtn) {
     el.reportRefreshBtn.disabled = true;
   }
-  el.lastAction.textContent = forceRefresh ? "Refreshing AI report..." : "Loading AI report...";
+  if (el.lastAction) {
+    el.lastAction.textContent = forceRefresh ? "Refreshing AI report..." : "Loading AI report...";
+  }
 
   try {
-    if (syncFirst) {
-      const synced = await runSync({
-        silent: true,
-        lookbackHours: 24,
-        includeAllHistory: false,
-        browsers: ["chrome", "brave", "safari"],
-        label: "Syncing before AI report...",
-      });
-      if (!synced) {
-        throw new Error("Sync failed before report generation.");
-      }
+    const synced = await runSync({
+      silent: true,
+      lookbackHours: 24,
+      includeAllHistory: false,
+      label: "Syncing before AI report...",
+    });
+
+    if (!synced) {
+      throw new Error("Sync failed before report generation.");
     }
 
     const report = await api("/api/report", {
@@ -1064,113 +1456,19 @@ async function generateReport(forceRefresh = false, options = {}) {
       body: JSON.stringify({ force_refresh: forceRefresh }),
     });
     renderReport(report);
-    el.lastAction.textContent = "AI report ready";
+
+    if (el.lastAction) {
+      el.lastAction.textContent = "AI report ready";
+    }
     showToast(forceRefresh ? "Report refreshed." : "Report ready.");
   } catch (error) {
-    el.lastAction.textContent = "AI report failed";
+    if (el.lastAction) {
+      el.lastAction.textContent = "AI report failed";
+    }
     showToast(error.message || "Could not generate report.");
   } finally {
-    el.reportBtn.disabled = false;
     if (el.reportRefreshBtn) {
       el.reportRefreshBtn.disabled = false;
-    }
-  }
-}
-
-async function runPowerSync() {
-  if (state.syncInFlight) {
-    showToast("Sync already running.");
-    return;
-  }
-
-  setNav("home");
-  el.searchMeta.textContent = "Showing today's timeline.";
-  el.lastAction.textContent = "Power sync running...";
-  try {
-    const synced = await runSync({
-      silent: false,
-      lookbackHours: 24,
-      includeAllHistory: false,
-      browsers: ["chrome", "brave", "safari"],
-      label: "Power syncing everything...",
-    });
-    if (!synced) {
-      return;
-    }
-
-    const { captureStartHour, captureEndHour } = getCaptureWindow();
-    const timeline = Array.isArray(state.snapshot?.timeline) ? state.snapshot.timeline : [];
-    state.windowCaptureEvents = filterByCaptureWindow(timeline, captureStartHour, captureEndHour);
-    renderWindowCapture();
-    await generateReport(false, { syncFirst: false });
-    el.lastAction.textContent = "Power sync complete";
-    showToast("Power sync complete.");
-  } catch (error) {
-    el.lastAction.textContent = "Power sync failed";
-    showToast(error.message || "Power sync failed.");
-  }
-}
-
-async function downloadReportPdf(forceRefresh = false) {
-  if (el.downloadReportBtn) {
-    el.downloadReportBtn.disabled = true;
-  }
-  el.lastAction.textContent = "Preparing PDF report...";
-
-  try {
-    const targetDate = state.currentReportDate || state.snapshot?.date || "";
-    const params = new URLSearchParams();
-    if (targetDate) {
-      params.set("day", targetDate);
-    }
-    if (forceRefresh) {
-      params.set("force_refresh", "true");
-    }
-    const url = `/api/report/pdf${params.toString() ? `?${params.toString()}` : ""}`;
-    const response = await fetch(url, {
-      headers: {
-        "X-Wave-Token": apiToken,
-      },
-    });
-
-    if (!response.ok) {
-      const payload = await response.json().catch(() => ({}));
-      throw new Error(payload.detail || `PDF download failed: ${response.status}`);
-    }
-
-    const blob = await response.blob();
-    if (!blob || blob.size === 0) {
-      throw new Error("PDF file is empty.");
-    }
-    const disposition = response.headers.get("content-disposition") || "";
-    const fileMatch = disposition.match(/filename=\"?([^\";]+)\"?/i);
-    const filename = fileMatch ? fileMatch[1] : `wave-report-${targetDate || "today"}.pdf`;
-
-    const downloadUrl = window.URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = downloadUrl;
-    anchor.download = filename;
-    const userAgent = navigator.userAgent || "";
-    const isSafari = /safari/i.test(userAgent) && !/chrome|chromium|android/i.test(userAgent);
-    if (isSafari) {
-      anchor.target = "_blank";
-      anchor.rel = "noopener noreferrer";
-    }
-    document.body.appendChild(anchor);
-    anchor.click();
-    window.setTimeout(() => {
-      window.URL.revokeObjectURL(downloadUrl);
-      anchor.remove();
-    }, 45000);
-
-    el.lastAction.textContent = "Report PDF downloaded";
-    showToast(isSafari ? "PDF opened. Save/download from the opened tab." : "Detailed PDF report downloaded.");
-  } catch (error) {
-    el.lastAction.textContent = "PDF download failed";
-    showToast(error.message || "Could not download PDF report.");
-  } finally {
-    if (el.downloadReportBtn) {
-      el.downloadReportBtn.disabled = false;
     }
   }
 }
@@ -1180,151 +1478,254 @@ async function loadCachedReport() {
     const report = await api("/api/report");
     renderReport(report);
   } catch {
-    resetReportUI();
+    resetReport();
   }
 }
 
-function setViewMode(mode) {
-  state.viewMode = mode;
-  setActive(el.viewButtons, "view", mode);
-  applyAndRender();
+async function requestReportPdf(forceRefresh = false) {
+  const targetDate = state.currentReportDate || state.snapshot?.date || "";
+  const params = new URLSearchParams();
+  if (targetDate) {
+    params.set("day", targetDate);
+  }
+  if (forceRefresh) {
+    params.set("force_refresh", "true");
+  }
+
+  const url = `/api/report/pdf${params.toString() ? `?${params.toString()}` : ""}`;
+  const response = await fetch(url, {
+    headers: {
+      "X-Wave-Token": apiToken,
+    },
+  });
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    throw new Error(payload.detail || `PDF download failed: ${response.status}`);
+  }
+
+  const blob = await response.blob();
+  if (!blob || blob.size === 0) {
+    throw new Error("PDF file is empty.");
+  }
+
+  const disposition = response.headers.get("content-disposition") || "";
+  const fileMatch = disposition.match(/filename=\"?([^\";]+)\"?/i);
+  const filename = fileMatch ? fileMatch[1] : `wave-report-${targetDate || "today"}.pdf`;
+  return { blob, filename };
 }
 
-function setBrowserFilter(browser) {
-  state.browserFilter = browser;
-  setActive(el.browserFilterButtons, "browser", browser);
-  applyAndRender();
-}
+async function openReportPreview() {
+  if (el.previewReportBtn) {
+    el.previewReportBtn.disabled = true;
+  }
+  if (el.previewDownloadBtn) {
+    el.previewDownloadBtn.disabled = true;
+  }
+  if (el.lastAction) {
+    el.lastAction.textContent = "Preparing report preview...";
+  }
 
-function setCollectionFilter(collection) {
-  state.collectionFilter = collection;
-  setActive(el.collectionFilterButtons, "collection", collection);
-  setActive(el.pillButtons, "collection", collection);
-  applyAndRender();
-}
-
-function setNav(nav) {
-  state.nav = nav;
-  setActive(el.navButtons, "nav", nav);
-
-  if (nav === "home") {
-    state.searchMode = false;
-    state.lastQuery = "";
-    if (state.snapshot) {
-      state.baseEvents = state.snapshot.timeline;
-      state.similarEvents = [];
+  try {
+    openPreview();
+    if (el.previewMeta) {
+      el.previewMeta.textContent = "Preparing preview...";
     }
-    clearSearchInputs();
-  }
 
-  if (nav === "ai") {
-    el.reportPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-    if (!state.currentReportDate) {
-      generateReport(false);
+    const report = await api("/api/report", {
+      method: "POST",
+      body: JSON.stringify({ force_refresh: false }),
+    });
+    renderReport(report);
+    renderPreviewReadable(report);
+
+    if (el.previewMeta) {
+      const modelLabel = String(report?.model || "-");
+      el.previewMeta.textContent = `${toDateLabel(report?.date)} | ${report?.source_events || 0} events | ${modelLabel}`;
+    }
+
+    const { blob } = await requestReportPdf(false);
+    if (state.previewBlobUrl) {
+      window.URL.revokeObjectURL(state.previewBlobUrl);
+      state.previewBlobUrl = null;
+    }
+    state.previewBlobUrl = window.URL.createObjectURL(blob);
+    if (el.reportPreviewFrame) {
+      el.reportPreviewFrame.src = `${state.previewBlobUrl}#zoom=page-width&view=FitH`;
+    }
+
+    if (el.lastAction) {
+      el.lastAction.textContent = "Report preview ready";
+    }
+    setPreviewMode("readable");
+    showToast("Preview ready.");
+  } catch (error) {
+    if (el.previewMeta) {
+      el.previewMeta.textContent = "Preview unavailable";
+    }
+    if (el.previewReadable) {
+      el.previewReadable.innerHTML = "";
+      el.previewReadable.appendChild(
+        paragraph(error.message || "Could not prepare report preview. Try refreshing analysis first."),
+      );
+    }
+    if (el.lastAction) {
+      el.lastAction.textContent = "Preview failed";
+    }
+    showToast(error.message || "Could not prepare report preview.");
+  } finally {
+    if (el.previewReportBtn) {
+      el.previewReportBtn.disabled = false;
+    }
+    if (el.previewDownloadBtn) {
+      el.previewDownloadBtn.disabled = false;
     }
   }
+}
 
-  applyAndRender();
+async function downloadReportPdf(forceRefresh = false) {
+  if (el.downloadReportBtn) {
+    el.downloadReportBtn.disabled = true;
+  }
+  if (el.previewDownloadBtn) {
+    el.previewDownloadBtn.disabled = true;
+  }
+  if (el.lastAction) {
+    el.lastAction.textContent = "Preparing PDF report...";
+  }
+
+  try {
+    const { blob, filename } = await requestReportPdf(forceRefresh);
+
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = downloadUrl;
+    anchor.download = filename;
+
+    const userAgent = navigator.userAgent || "";
+    const isSafari = /safari/i.test(userAgent) && !/chrome|chromium|android/i.test(userAgent);
+    if (isSafari) {
+      anchor.target = "_blank";
+      anchor.rel = "noopener noreferrer";
+    }
+
+    document.body.appendChild(anchor);
+    anchor.click();
+    window.setTimeout(() => {
+      window.URL.revokeObjectURL(downloadUrl);
+      anchor.remove();
+    }, 45000);
+
+    if (el.lastAction) {
+      el.lastAction.textContent = "Report PDF downloaded";
+    }
+    showToast(isSafari ? "PDF opened. Save/download from the opened tab." : "Detailed PDF report downloaded.");
+  } catch (error) {
+    if (el.lastAction) {
+      el.lastAction.textContent = "PDF download failed";
+    }
+    showToast(error.message || "Could not download PDF report.");
+  } finally {
+    if (el.downloadReportBtn) {
+      el.downloadReportBtn.disabled = false;
+    }
+    if (el.previewDownloadBtn) {
+      el.previewDownloadBtn.disabled = false;
+    }
+  }
 }
 
 function attachListeners() {
-  el.searchInputPanel.addEventListener("keydown", async (event) => {
-    if (event.key === "Enter") {
-      await runSearch();
+  if (el.settingsBtn) {
+    el.settingsBtn.addEventListener("click", openSettings);
+  }
+  if (el.historyBtn) {
+    el.historyBtn.addEventListener("click", openHistory);
+  }
+  if (el.searchBtn) {
+    el.searchBtn.addEventListener("click", openSearch);
+  }
+  if (el.closeSettingsBtn) {
+    el.closeSettingsBtn.addEventListener("click", closeSettings);
+  }
+  if (el.closeHistoryBtn) {
+    el.closeHistoryBtn.addEventListener("click", closeHistory);
+  }
+  if (el.closeSearchBtn) {
+    el.closeSearchBtn.addEventListener("click", closeSearch);
+  }
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+    if (target.dataset.closeModal === "true") {
+      closeSettings();
+    }
+    if (target.dataset.closeHistory === "true") {
+      closeHistory();
+    }
+    if (target.dataset.closeSearch === "true") {
+      closeSearch();
+    }
+    if (target.dataset.closePreview === "true") {
+      closePreview();
     }
   });
 
   document.addEventListener("keydown", (event) => {
-    const active = document.activeElement;
-    const inInput = active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA");
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-      event.preventDefault();
-      el.searchInputPanel.focus();
-      el.searchInputPanel.select();
-      return;
-    }
-    if (!inInput && event.key === "/") {
-      event.preventDefault();
-      el.searchInputPanel.focus();
-    }
-    if (!inInput && (event.metaKey || event.ctrlKey) && event.shiftKey && event.key.toLowerCase() === "s") {
-      event.preventDefault();
-      runPowerSync();
+    if (event.key === "Escape") {
+      closeSettings();
+      closeHistory();
+      closeSearch();
+      closePreview();
     }
   });
 
-  el.searchBtn.addEventListener("click", async () => {
-    await runSearch();
-  });
+  if (el.startHour) {
+    el.startHour.addEventListener("change", updateCaptureHint);
+  }
+  if (el.endHour) {
+    el.endHour.addEventListener("change", updateCaptureHint);
+  }
 
-  el.clearSearchBtn.addEventListener("click", () => {
-    clearSearchInputs();
-    state.searchMode = false;
-    state.lastQuery = "";
-    state.baseEvents = state.snapshot ? state.snapshot.timeline : [];
-    state.similarEvents = [];
-    el.searchMeta.textContent = "Showing today's timeline.";
-    applyAndRender();
-  });
-
-  el.syncBtn.addEventListener("click", async () => {
-    setNav("home");
-    el.searchMeta.textContent = "Showing today's timeline.";
-    await runSync({
-      silent: false,
-      lookbackHours: 24,
-      includeAllHistory: false,
-      browsers: ["chrome", "brave", "safari"],
-      label: "Syncing...",
-    });
-  });
-
-  if (el.powerBtn) {
-    el.powerBtn.addEventListener("click", async () => {
-      await runPowerSync();
+  if (el.historySearchInput) {
+    el.historySearchInput.addEventListener("input", () => {
+      state.historyQuery = el.historySearchInput.value || "";
+      renderHistoryPanel();
     });
   }
 
-  el.safariFullBtn.addEventListener("click", async () => {
-    setNav("home");
-    el.searchMeta.textContent = "Showing today's timeline.";
-    await runSync({
-      silent: false,
-      lookbackHours: 24,
-      includeAllHistory: true,
-      browsers: ["safari"],
-      label: "Importing full Safari history...",
-    });
-  });
-
-  el.liveBtn.addEventListener("click", () => {
-    setLiveSync(!state.liveSyncEnabled);
-    showToast(`Live sync ${state.liveSyncEnabled ? "enabled" : "disabled"}.`);
-  });
-
-  el.reportBtn.addEventListener("click", async (event) => {
-    await generateReport(event.shiftKey);
-  });
-
-  if (el.reportRefreshBtn) {
-    el.reportRefreshBtn.addEventListener("click", async () => {
-      await generateReport(true);
+  if (el.searchForm) {
+    el.searchForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      await runHistorySearch(el.searchInput?.value || "");
     });
   }
 
-  if (el.downloadReportBtn) {
-    el.downloadReportBtn.addEventListener("click", async () => {
-      await downloadReportPdf(false);
+  el.historyTabs.forEach((button) => {
+    button.addEventListener("click", () => {
+      setHistoryTab(button.dataset.historyTab || "history");
+    });
+  });
+
+  if (el.syncBtn) {
+    el.syncBtn.addEventListener("click", async () => {
+      await runSync({
+        silent: false,
+        lookbackHours: 24,
+        includeAllHistory: false,
+        label: "Syncing...",
+      });
     });
   }
 
-  el.permissionBtn.addEventListener("click", async () => {
-    await checkPermissions(false);
-  });
-
-  el.clearHistoryBtn.addEventListener("click", async () => {
-    await clearWaveData();
-  });
+  if (el.permissionBtn) {
+    el.permissionBtn.addEventListener("click", async () => {
+      await checkPermissions(false);
+    });
+  }
 
   if (el.captureWindowBtn) {
     el.captureWindowBtn.addEventListener("click", async () => {
@@ -1338,62 +1739,71 @@ function attachListeners() {
     });
   }
 
-  if (el.clearWindowCaptureBtn) {
-    el.clearWindowCaptureBtn.addEventListener("click", () => {
-      state.windowCaptureEvents = [];
-      renderWindowCapture();
-      showToast("Captured window cleared.");
+  if (el.clearHistoryBtn) {
+    el.clearHistoryBtn.addEventListener("click", async () => {
+      await clearWaveData();
     });
   }
 
-  el.startHour.addEventListener("change", updateCaptureHint);
-  el.endHour.addEventListener("change", updateCaptureHint);
-
-  el.viewButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      setViewMode(button.dataset.view || "list");
+  if (el.reportRefreshBtn) {
+    el.reportRefreshBtn.addEventListener("click", async () => {
+      await generateReport(true);
     });
-  });
+  }
 
-  el.browserFilterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      setBrowserFilter(button.dataset.browser || "all");
+  if (el.previewReportBtn) {
+    el.previewReportBtn.addEventListener("click", async () => {
+      await openReportPreview();
     });
-  });
+  }
 
-  el.collectionFilterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      setCollectionFilter(button.dataset.collection || "all");
+  if (el.downloadReportBtn) {
+    el.downloadReportBtn.addEventListener("click", async () => {
+      await downloadReportPdf(false);
     });
-  });
+  }
 
-  el.pillButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      setCollectionFilter(button.dataset.collection || "all");
+  if (el.previewDownloadBtn) {
+    el.previewDownloadBtn.addEventListener("click", async () => {
+      await downloadReportPdf(false);
     });
-  });
+  }
 
-  el.navButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      setNav(button.dataset.nav || "home");
+  if (el.previewReadableBtn) {
+    el.previewReadableBtn.addEventListener("click", () => {
+      setPreviewMode("readable");
     });
-  });
+  }
+
+  if (el.previewPdfBtn) {
+    el.previewPdfBtn.addEventListener("click", () => {
+      setPreviewMode("pdf");
+    });
+  }
+
+  if (el.closePreviewBtn) {
+    el.closePreviewBtn.addEventListener("click", closePreview);
+  }
 }
 
 (async function boot() {
   try {
     setupHourSelectors();
-    renderWindowCapture();
     attachListeners();
     await loadSnapshot();
     await checkPermissions(true);
     await loadCachedReport();
+
     updateSavedCounts();
-    updateHealthStrip();
-    el.searchMeta.textContent = "Showing today's timeline.";
-    el.lastAction.textContent = "Ready";
+    renderHistoryPanel();
+    renderSearchPanels();
+    if (el.lastAction) {
+      el.lastAction.textContent = "Ready";
+    }
   } catch (error) {
-    el.lastAction.textContent = "Backend unavailable";
+    if (el.lastAction) {
+      el.lastAction.textContent = "Backend unavailable";
+    }
     showToast(error.message || "Could not load data.");
   }
 })();
