@@ -1,6 +1,6 @@
 # Wave
 
-Wave is a privacy-consented browser memory app. It ingests local browsing history from Safari, Chrome, and Brave, stores it locally, and generates an AI "Today on the Internet" report. And like it will be like aready to use and know what is going on yours historys.
+Wave is a privacy-consented browser memory app. It ingests local browsing history from Safari, Chrome, and Brave, stores it locally, and generates an AI "Today on the Internet" report. And like it will be like aready to use and know what is going on yours historys. And more
 
 ## What this MVP does
 
